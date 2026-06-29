@@ -3,202 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>중등 AI 프롬프트</title>
+<title>고등 AI 프롬프트</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-    font-family:"Pretendard","맑은 고딕",sans-serif;
-    background:#f4f7fb;
-    color:#333;
+    margin:0;
+    font-family:'Pretendard','맑은 고딕',sans-serif;
+    background:#eef3f8;
 }
 
 header{
-    background:#4F46E5;
+    background:#0F766E;
     color:white;
-    padding:30px 20px;
+    padding:30px;
     text-align:center;
-}
-
-header h1{
-    font-size:32px;
-    margin-bottom:10px;
-}
-
-header p{
-    opacity:.9;
 }
 
 .container{
     max-width:900px;
     margin:auto;
-    padding:30px 20px;
+    padding:25px;
 }
 
 .card{
     background:white;
-    border-radius:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-    padding:25px;
     margin-bottom:25px;
+    padding:22px;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
 .card h2{
-    color:#4F46E5;
-    margin-bottom:15px;
+    margin-top:0;
+    color:#0F766E;
 }
 
 textarea{
     width:100%;
-    height:280px;
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:15px;
+    height:260px;
     resize:none;
-    background:#fafafa;
+    padding:15px;
     font-size:15px;
     line-height:1.7;
+    border-radius:10px;
+    border:1px solid #ccc;
+    background:#fafafa;
 }
 
 button{
     width:100%;
     margin-top:15px;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    background:#4F46E5;
-    color:white;
+    padding:14px;
     font-size:17px;
     font-weight:bold;
+    color:white;
+    background:#0F766E;
+    border:none;
+    border-radius:10px;
     cursor:pointer;
-    transition:.2s;
 }
 
 button:hover{
-    background:#3730A3;
-}
-
-footer{
-    text-align:center;
-    padding:30px;
-    color:#888;
+    background:#115E59;
 }
 </style>
+
 </head>
 
 <body>
 
 <header>
-<h1>🤖 중등 AI 프롬프트</h1>
+<h1>🎓 고등 AI 프롬프트</h1>
 <p>복사 버튼을 눌러 ChatGPT에 붙여 넣으세요.</p>
 </header>
 
-<div class="container">
-
-<div class="card">
-<h2>2. 나는 어떤 상품일까?</h2>
-
-<textarea id="p2" readonly>나는 ___이다.
-
-그 상품이 가진 기능, 특징, 성격을 활용해서 나의 ___ 모습과 어떻게 닮았는지 예시를 들어 설명하고 네 줄 이내로 써줘.</textarea>
-
-<button onclick="copyText('p2')">📋 복사하기</button>
-</div>
-
-<div class="card">
-<h2>3. 나의 매력 보고서 (삼행시)</h2>
-
-<textarea id="p3" readonly>아래의 소개 내용을 분석한 후 이름 삼행시를 지어줘.
-
-내 이름은 000이야.
-
-나의 흥미는 ___
-
-내가 잘하는 것(강점)은 ___
-
-내가 세상에 전하고 싶은 가장 소중한 메시지(가치)는 ___.</textarea>
-
-<button onclick="copyText('p3')">📋 복사하기</button>
-</div>
-
-<div class="card">
-<h2>4-1. AI와 함께하는 커리어 로드맵</h2>
-
-<textarea id="p41" readonly>너는 지금부터 최고의 퍼스널 브랜딩 전문가이자 커리어 컨설턴트야.
-
-나의 데이터들을 분석해서, 중1인 내가 도전해 볼 만한 미래 직업 3가지와 그 이유를 알려줘.
-
-1. 나의 정체성 : (이름 삼행시)
-
-2. 나의 색깔과 특성 : (보라색 / 기록하는 사람)
-
-3. 나의 강점 : (꼼꼼함, 인내심)
-
-4. 내가 추구하는 가치 : (도전, 성공)
-
-5. 내가 관심있는 분야 :
-(IT, 미디어, 과학기술, 의료보건, 경제, 예술, 스포츠, 교육…)
-
-이 데이터들을 바탕으로
-
-① 나에게 어울리는 미래 직업 3가지
-
-② 추천하는 이유
-
-③ 준비해야 할 역량
-
-을 자세하게 알려줘.</textarea>
-
-<button onclick="copyText('p41')">📋 복사하기</button>
-</div>
-
-<div class="card">
-<h2>4-2. AI와 함께하는 커리어 로드맵</h2>
-
-<textarea id="p42" readonly>너는 최고의 퍼스널 브랜딩 전문가이자 커리어 컨설턴트야.
-
-이전 대화에 저장된 나의 이름 삼행시, 특징, 강점, 가치 데이터와 아래 내용을 함께 분석해서 중1인 내가 도전해볼 만한 미래 직업 3가지를 추천해줘.
-
-관심 분야 :
-(IT, 미디어, 과학기술, 의료보건, 경제, 예술, 스포츠, 교육…)
-
-그리고 각 직업마다
-
-• 왜 나와 잘 맞는지
-
-• 준비해야 할 역량
-
-• 앞으로 하면 좋은 활동
-
-을 구체적으로 설명해줘.</textarea>
-
-<button onclick="copyText('p42')">📋 복사하기</button>
-</div>
-
-</div>
-
-<footer>
-Made for AI Classroom 🚀
-</footer>
+<div class="container" id="cards"></div>
 
 <script>
-function copyText(id){
-    const text=document.getElementById(id).value;
 
-    navigator.clipboard.writeText(text).then(function(){
-        alert("✅ 프롬프트가 복사되었습니다.");
-    }).catch(function(){
-        const area=document.getElementById(id);
-        area.select();
-        document.execCommand("copy");
-        alert("✅ 프롬프트가 복사되었습니다.");
-    });
+const prompts=[
+
+{
+title:"2. 나는 어떤 상품일까?",
+text:`나는 ___이다.
+
+그 상품이 가진 기능, 특징, 성격을 활용해서 나의 ___ 모습과 어떻게 닮았는지 예시를 들어 설명하고 네 줄 이내로 써줘.`
+},
+
+{
+title:"3. 나의 매력 보고서 (삼행시)",
+text:`아래의 소개 내용을 분석한 후 이름 삼행시를 지어줘.
+
+내 이름은 000이야.
+나의 흥미는 ___
+내가 잘하는 것(강점)은 ___
+내가 세상에 전하고 싶은 가장 소중한 메시지(가치)는 ___.`
+},
+
+{
+title:"4-1. AI와 함께하는 커리어 로드맵 (전공 찾기)",
+text:`(선택1) 내게 맞는 전공 찾기
+
+너는 진로 컨설턴트야.
+내 정보를 보고 나에게 잘 맞는 대학 전공 3개를 추천해줘.
+
+1. 나의 정체성:
+2. 나의 색깔과 특징:
+3. 나의 강점:
+4. 내가 추구하는 가치:
+5. 희망 전공계열:
+
+각 전공마다
+
+1. 나와 잘 맞는 이유
+2. 대학에서 배우는 내용
+3. 졸업 후 진로를 간단하게 알려줘.
+
+난 고1이야.`
+},
+
+{
+title:"4-2. AI와 함께하는 커리어 로드맵 (선택과목 추천)",
+text:`너는 입시 전문가야.
+
+내 정보를 보고 고2 선택과목을 추천해줘.
+
+1. 나의 정체성:
+2. 나의 색깔과 특징:
+3. 나의 강점:
+4. 내가 추구하는 가치:
+5. 희망 전공계열:
+
+다음 내용을 알려줘.
+
+1. 추천 선택과목
+2. 나에게 유리한 이유
+3. 주의할 과목
+4. 지금부터 준비할 점
+
+난 고1이야.`
+},
+
+{
+title:"4-3. AI와 함께하는 커리어 로드맵 (세특 전략)",
+text:`너는 학생부 전문가야.
+
+내 정보를 바탕으로 고1 학생 기준 세특 준비 전략을 알려줘.
+
+1. 나의 정체성:
+2. 나의 색깔과 특징:
+3. 나의 강점:
+4. 내가 추구하는 가치:
+5. 희망 전공계열:
+
+다음 내용을 알려줘.
+
+1. 과목별 세특에 좋은 행동
+2. 발표 주제 추천
+3. 수업시간 질문 예시
+4. 지금부터 실천할 점
+
+난 고1이야.`
 }
+
+];
+
+const container=document.getElementById("cards");
+
+prompts.forEach((p,i)=>{
+
+container.innerHTML+=`
+
+<div class="card">
+
+<h2>${p.title}</h2>
+
+<textarea readonly id="t${i}">${p.text}</textarea>
+
+<button onclick="copyText('t${i}')">📋 복사하기</button>
+
+</div>
+
+`;
+
+});
+
+function copyText(id){
+
+navigator.clipboard.writeText(document.getElementById(id).value);
+
+alert("✅ 복사되었습니다.");
+
+}
+
 </script>
 
 </body>
