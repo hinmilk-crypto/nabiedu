@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI 커리어 브랜딩 프롬프트</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:"Pretendard","맑은 고딕",sans-serif;
+background:#F5F3FF;
+color:#333;
+}
+
+header{
+background:linear-gradient(135deg,#6D28D9,#8B5CF6);
+color:white;
+padding:40px 20px;
+text-align:center;
+}
+
+header h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+header p{
+opacity:.9;
+font-size:18px;
+}
+
+.container{
+max-width:950px;
+margin:auto;
+padding:30px 20px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:25px;
+margin-bottom:25px;
+box-shadow:0 6px 15px rgba(0,0,0,.08);
+}
+
+.card h2{
+color:#6D28D9;
+margin-bottom:15px;
+}
+
+textarea{
+width:100%;
+height:320px;
+padding:18px;
+border-radius:12px;
+border:1px solid #ddd;
+resize:none;
+font-size:15px;
+line-height:1.8;
+background:#fafafa;
+}
+
+button{
+width:100%;
+margin-top:15px;
+padding:16px;
+border:none;
+border-radius:12px;
+background:#6D28D9;
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+transition:.2s;
+}
+
+button:hover{
+background:#5B21B6;
+}
+
+footer{
+text-align:center;
+padding:40px;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>💜 AI 커리어 브랜딩 프롬프트</h1>
+
+<p>복사 버튼을 눌러 Gemini 또는 ChatGPT에 붙여 넣어 보세요.</p>
+
+</header>
+
+<div class="container">
+
+
+<div class="card">
+
+<h2>① 나의 강점 발견하기</h2>
+
+<textarea id="p1" readonly>
+
+너는 최고의 커리어 코치이자 강점 분석 전문가야.
+
+아래 내용을 분석해서 나의 강점을 알려줘.
+
+이름 :
+
+좋아하는 것 :
+
+잘하는 것 :
+
+다른 사람들이 자주 칭찬하는 것 :
+
+시간 가는 줄 모르고 하는 일 :
+
+나의 경험을 바탕으로
+
+① 핵심 강점 5가지
+
+② 나에게 잘 맞는 역할
+
+③ 앞으로 더 키우면 좋은 능력
+
+을 쉽게 설명해줘.
+
+</textarea>
+
+<button onclick="copyText('p1')">📋 복사하기</button>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>② 나의 퍼스널 브랜드 만들기</h2>
+
+<textarea id="p2" readonly>
+
+너는 최고의 퍼스널 브랜딩 전문가야.
+
+내가 작성한 내용을 분석해서
+
+나를 가장 잘 표현하는 브랜드를 만들어줘.
+
+다음 형식으로 작성해줘.
+
+브랜드 이름
+
+브랜드 한 줄 소개
+
+브랜드 슬로건
+
+나만의 강점
+
+나의 차별점
+
+어울리는 이미지 키워드
+
+</textarea>
+
+<button onclick="copyText('p2')">📋 복사하기</button>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>③ AI 미래 명함 만들기</h2>
+
+<textarea id="p3" readonly>
+
+너는 최고의 브랜드 디자이너야.
+
+나의 정보를 바탕으로
+
+10년 후의 미래 명함을 만들어줘.
+
+포함 내용
+
+이름
+
+미래 직업
+
+한 줄 소개
+
+전문 분야
+
+대표 강점
+
+대표 프로젝트
+
+슬로건
+
+명함 디자인 분위기
+
+</textarea>
+
+<button onclick="copyText('p3')">📋 복사하기</button>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>④ 퍼스널 비주얼 카드 만들기</h2>
+
+<textarea id="p4" readonly>
+
+너는 최고의 브랜드 디렉터이자 디자이너야.
+
+내 정보를 분석해서
+
+퍼스널 비주얼 카드를 제작하기 위한 내용을 만들어줘.
+
+포함 내용
+
+대표 키워드
+
+브랜드 컬러
+
+대표 아이콘
+
+나를 상징하는 물건
+
+대표 슬로건
+
+브랜드 소개
+
+그리고 AI 이미지 생성용 프롬프트도 함께 작성해줘.
+
+</textarea>
+
+<button onclick="copyText('p4')">📋 복사하기</button>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>⑤ AI 커리어 코치</h2>
+
+<textarea id="p5" readonly>
+
+너는 최고의 커리어 컨설턴트야.
+
+내 정보를 분석해서
+
+앞으로의 커리어 방향을 제안해줘.
+
+1. 잘 맞는 직업 3가지
+
+2. 추천 이유
+
+3. 앞으로 배우면 좋은 기술
+
+4. 추천 자격증
+
+5. 추천 활동
+
+6. 앞으로 1년 실행계획
+
+실행 가능한 내용 중심으로 작성해줘.
+
+</textarea>
+
+<button onclick="copyText('p5')">📋 복사하기</button>
+
+</div>
+
+</div>
+
+<footer>
+
+Made with AI 💜 Vision, I'm Possible
+
+</footer>
+
+<script>
+
+function copyText(id){
+
+const text=document.getElementById(id).value;
+
+navigator.clipboard.writeText(text).then(function(){
+
+alert("✅ 프롬프트가 복사되었습니다.");
+
+}).catch(function(){
+
+const area=document.getElementById(id);
+
+area.select();
+
+document.execCommand("copy");
+
+alert("✅ 프롬프트가 복사되었습니다.");
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
