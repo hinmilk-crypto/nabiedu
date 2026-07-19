@@ -498,9 +498,16 @@ PERSONAL VISUAL CARD
 📋 프롬프트 복사
 </button>
 
-<button class="clear" onclick="clearPrompt()">
+<button class="clear" onclick="resetPrompt()">
 🗑 초기화
 </button>
+<!--버튼초기화-->
+<script>
+function resetPrompt() {
+    document.getElementById("prompt").value =
+        document.getElementById("prompt").defaultValue;
+}
+</script>
 
 </div>
 
