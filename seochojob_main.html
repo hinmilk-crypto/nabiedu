@@ -561,16 +561,17 @@ localStorage.setItem("prompt",textarea.value);
 
 });
 
-window.onload=()=>{
+window.onload = () => {
 
-const saved=localStorage.getItem("prompt");
+    const saved = localStorage.getItem("prompt");
 
-if(saved){
+    if (saved !== null) {
+        textarea.value = saved;
+    } else {
+        textarea.value = textarea.defaultValue; // HTML에 있는 기본 프롬프트
+    }
 
-textarea.value=saved;
-
-count.innerText=saved.length;
-
+    count.innerText = textarea.value.length;
 }
 
 }
