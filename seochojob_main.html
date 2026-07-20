@@ -252,42 +252,7 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
 </section>
 
-<!--
 <div class="wrapper">
-
-<div class="card">
-
-<h2>📌 체험 방법</h2>
-
-<div class="steps">
-
-<div class="step">
-<span>1</span>
-<h4>프롬프트 작성</h4>
-<p>아래 내용을 작성합니다.</p>
-</div>
-
-<div class="step">
-<span>2</span>
-<h4>프롬프트 복사</h4>
-<p>버튼을 눌러 복사합니다.</p>
-</div>
-
-<div class="step">
-<span>3</span>
-<h4>AI 생성</h4>
-<p>ChatGPT에 붙여넣기</p>
-</div>
-
-<div class="step">
-<span>4</span>
-<h4>패들렛 업로드</h4>
-<p>완성작을 공유합니다.</p>
-</div>
-
-</div>
-
-</div>-->
 
 <div class="card">
 
@@ -501,7 +466,7 @@ PERSONAL VISUAL CARD
 📋 프롬프트 복사
 </button>
 
-<button class="clear" onclick="location.reload();">
+<button class="clear" onclick="clearPrompt()">
 🗑 초기화
 </button>
 
@@ -553,6 +518,9 @@ AI 퍼스널 비주얼 카드 체험부스
 const textarea=document.getElementById("prompt");
 const count=document.getElementById("count");
 
+// 페이지에 원래 적혀 있던 "기본 프롬프트"를 localStorage로 덮어쓰기 전에 따로 저장해둔다.
+const defaultPrompt=textarea.value;
+
 textarea.addEventListener("input",()=>{
 
 count.innerText=textarea.value.length;
@@ -570,6 +538,10 @@ if(saved){
 textarea.value=saved;
 
 count.innerText=saved.length;
+
+}else{
+
+count.innerText=defaultPrompt.length;
 
 }
 
@@ -593,13 +565,13 @@ toast.classList.remove("show");
 
 function clearPrompt(){
 
-if(confirm("내용을 모두 삭제하시겠습니까?")){
-
-textarea.value="";
-
-count.innerText=0;
+if(confirm("작성한 내용을 지우고 기본 프롬프트로 되돌리시겠습니까?")){
 
 localStorage.removeItem("prompt");
+
+textarea.value=defaultPrompt;
+
+count.innerText=defaultPrompt.length;
 
 }
 
