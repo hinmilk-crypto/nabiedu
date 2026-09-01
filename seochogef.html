@@ -125,6 +125,17 @@ border-radius:18px;
 padding:24px 20px;
 text-align:center;
 border:2px solid transparent;
+cursor:pointer;
+transition:.2s;
+}
+
+.activity:hover{
+border-color:var(--primary);
+transform:translateY(-3px);
+}
+
+html{
+scroll-behavior:smooth;
 }
 
 .activity .num{
@@ -382,19 +393,19 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
     <div class="activities">
 
-        <div class="activity">
+        <div class="activity" onclick="document.getElementById('activity1').scrollIntoView({behavior:'smooth', block:'start'})">
             <span class="num">1</span>
             <h3>AI 나다움 연구소</h3>
             <p>나를 만드는 건 성별이 아니라<br>나의 가능성</p>
         </div>
 
-        <div class="activity">
+        <div class="activity" onclick="document.getElementById('activity2').scrollIntoView({behavior:'smooth', block:'start'})">
             <span class="num">2</span>
             <h3>AI 미래명함 제작소</h3>
             <p>정해진 역할은 NO!<br>내가 만드는 나의 미래</p>
         </div>
 
-        <div class="activity">
+        <div class="activity" onclick="document.getElementById('activity3').scrollIntoView({behavior:'smooth', block:'start'})">
             <span class="num">3</span>
             <h3>AI 가능성 공방</h3>
             <p>성별의 경계를 넘어,<br>나답게 펼치는 가능성</p>
@@ -460,7 +471,7 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
 </div>
 
-<div class="card prompt-card">
+<div class="card prompt-card" id="activity1">
 
 <div class="prompt-title">
 <h2>① AI로 발견하는 나의 가능성</h2>
@@ -521,7 +532,7 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
 </div>
 
-<div class="card prompt-card">
+<div class="card prompt-card" id="activity2">
 
 <div class="prompt-title">
 <h2>② AI로 만드는 나의 미래 명함</h2>
@@ -587,7 +598,7 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
 </div>
 
-<div class="card prompt-card">
+<div class="card prompt-card" id="activity3">
 
 <div class="prompt-title">
 <h2>③ AI로 만드는 나의 스토리 카드</h2>
