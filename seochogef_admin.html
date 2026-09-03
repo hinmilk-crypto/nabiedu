@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI로 만드는 나(Na)의 미래</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--primary:#6C63FF;
+--secondary:#8B7FFF;
+--mint:#57D9C4;
+--bg:#f5f7fb;
+--card:#ffffff;
+--text:#333;
+--shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Pretendard, sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#f8fbff,#eef2ff);
+color:var(--text);
+}
+
+.hero{
+padding:60px 20px 50px;
+text-align:center;
+background:
+radial-gradient(circle at top right,#dcd7ff 0%,transparent 35%),
+radial-gradient(circle at bottom left,#d9fff7 0%,transparent 35%);
+}
+
+.hero .event-name{
+color:var(--primary);
+font-size:16px;
+font-weight:600;
+letter-spacing:.5px;
+margin-bottom:10px;
+}
+
+.hero .icon{
+font-size:60px;
+margin-bottom:10px;
+animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+}
+
+.hero h1{
+font-size:40px;
+font-weight:800;
+margin-bottom:18px;
+line-height:1.35;
+}
+
+.hero .copy-lines{
+font-size:17px;
+color:#555;
+line-height:1.9;
+max-width:560px;
+margin:0 auto 25px;
+}
+
+.hero .copy-lines .highlight{
+color:var(--primary);
+font-weight:700;
+}
+
+.hero img{
+border-radius:16px;
+box-shadow:var(--shadow);
+padding:10px;
+background:white;
+}
+
+.wrapper{
+max-width:1000px;
+margin:auto;
+padding:10px 20px 70px;
+}
+
+.card{
+background:white;
+border-radius:24px;
+padding:30px;
+margin-bottom:25px;
+box-shadow:var(--shadow);
+}
+
+.card h2{
+margin-bottom:20px;
+color:var(--primary);
+}
+
+.card > p.section-lead{
+color:#666;
+margin-bottom:20px;
+line-height:1.7;
+}
+
+/* 활동 안내 */
+.activities{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+}
+
+.activity{
+background:#f7f8ff;
+border-radius:18px;
+padding:24px 20px;
+text-align:center;
+border:2px solid transparent;
+cursor:pointer;
+transition:.2s;
+}
+
+.activity:hover{
+border-color:var(--primary);
+transform:translateY(-3px);
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+.activity .num{
+display:inline-block;
+width:40px;
+height:40px;
+line-height:40px;
+border-radius:50%;
+background:var(--primary);
+color:white;
+font-weight:bold;
+margin-bottom:14px;
+font-size:15px;
+}
+
+.activity h3{
+font-size:17px;
+margin-bottom:10px;
+}
+
+.activity p{
+font-size:14px;
+color:#666;
+line-height:1.6;
+}
+
+.activity .qr{
+margin-top:16px;
+width:100px;
+height:100px;
+border-radius:10px;
+background:white;
+padding:6px;
+box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
+.closing{
+text-align:center;
+margin-top:28px;
+padding-top:24px;
+border-top:1px solid #eee;
+}
+
+.closing h3{
+color:var(--primary);
+font-size:19px;
+margin-bottom:8px;
+}
+
+.closing p{
+color:#666;
+}
+
+/* 체험방법 */
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+gap:15px;
+}
+
+.step{
+background:#f7f8ff;
+border-radius:18px;
+padding:20px;
+text-align:left;
+}
+
+.step h3{
+margin-bottom:20px;
+}
+
+.step p{
+margin-bottom:14px;
+}
+
+.step p:last-child{
+margin-bottom:0;
+}
+
+/* 프롬프트 카드 */
+.prompt-card{
+border:2px solid #eef0fb;
+}
+
+.prompt-title{
+display:flex;
+align-items:baseline;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:6px;
+}
+
+.prompt-title h2{
+margin-bottom:0;
+}
+
+.prompt-tagline{
+color:var(--mint);
+font-weight:700;
+font-size:15px;
+margin-bottom:18px;
+}
+
+textarea{
+width:100%;
+height:340px;
+padding:20px;
+border-radius:16px;
+border:2px solid #e3e5ef;
+font-size:15px;
+line-height:1.6;
+resize:vertical;
+outline:none;
+}
+
+textarea:focus{
+border-color:var(--primary);
+}
+
+.counter{
+text-align:right;
+margin-top:8px;
+color:#888;
+font-size:14px;
+}
+
+.buttons{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+button{
+flex:1;
+padding:18px;
+border:none;
+border-radius:14px;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.copy{
+background:var(--primary);
+color:white;
+}
+
+.copy:hover{
+transform:translateY(-2px);
+}
+
+.clear{
+background:#ececec;
+}
+
+.links{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.link-btn{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:22px;
+border-radius:18px;
+text-decoration:none;
+font-size:20px;
+font-weight:700;
+color:white;
+transition:.2s;
+}
+
+.gallery{
+background:linear-gradient(135deg,#6C63FF,#897CFF);
+}
+
+.prompt-link{
+background:linear-gradient(135deg,#3BC9DB,#57D9C4);
+}
+
+.link-btn:hover{
+transform:translateY(-4px);
+}
+
+footer{
+padding:40px;
+text-align:center;
+color:#888;
+}
+
+.toast{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#222;
+color:white;
+padding:16px 25px;
+border-radius:12px;
+opacity:0;
+transition:.3s;
+pointer-events:none;
+z-index:999;
+}
+
+.toast.show{
+opacity:1;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:28px;
+}
+
+.hero .copy-lines{
+font-size:15px;
+}
+
+.steps{
+grid-template-columns:1fr !important;
+}
+
+.activities{
+grid-template-columns:1fr !important;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+
+<div class="event-name">2026 서초구 양성평등 풀뿌리축제</div>
+
+<div class="icon">🦋</div>
+
+<h1>AI로 만드는 나(Na)의 미래</h1>
+
+<div class="copy-lines">
+<span class="highlight">성별이 정한 길이 아니라,</span><br>
+내가 선택하는 나의 길<br><br>
+AI에게 나의 경험과 관심사를 알려주고<br>
+미래의 나를 한 장의 카드로 만들어보세요!<br><br>
+누구나 원하는 모습으로<br>
+자신의 가능성을 펼칠 수 있도록!
+</div>
+
+</section>
+
+<div class="wrapper">
+
+<div class="card">
+
+    <h2>🌱 활동 안내</h2>
+
+    <div class="activities">
+
+        <div class="activity" onclick="document.getElementById('activity1').scrollIntoView({behavior:'smooth', block:'start'})">
+            <span class="num">1</span>
+            <h3>AI 나(Na)다움 연구소</h3>
+            <p><strong>AI로 만드는 나의 스토리 카드</strong><br>성별의 경계를 넘어,<br>나다운 가능성을 발견해요.</p>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmilk-crypto.github.io/nabiedu/seochogef.html">
+        </div>
+
+        <div class="activity" onclick="window.open('https://polite-druid-9293b4.netlify.app/','_blank')">
+            <span class="num">2</span>
+            <h3>나(Na) 미래명함 제작소</h3>
+            <p><strong>내가 만드는 나의 미래명함</strong><br>정해진 역할을 넘어,<br>내가 원하는 미래를 그려봐요.</p>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://polite-druid-9293b4.netlify.app/">
+        </div>
+
+    </div>
+
+    <div class="closing">
+        <h3>나의 다음 챕터</h3>
+        <p>누구에게나 선택할 수 있는 미래가 있습니다!</p>
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>📌 체험 방법</h2>
+
+    <div class="steps">
+
+        <!-- PC 작성 -->
+        <div class="step">
+
+            <h3>💻 PC에서 작성</h3>
+
+            <p><strong>🖥 1단계</strong><br>
+            원하는 활동을 골라 AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
+
+            <p><strong>📋 2단계</strong><br>
+            <b>「프롬프트 복사」</b> 버튼을 클릭해요.</p>
+
+            <p><strong>📱 3단계</strong><br>
+            스마트폰으로 본인의 ChatGPT(또는 이미지 생성 AI)를 열고 복사한 프롬프트를 붙여넣어요.</p>
+
+            <p><strong>✨ 4단계</strong><br>
+            AI가 만들어준 나의 카드를 확인해요.</p>
+
+            <p><strong>🖼 5단계</strong><br>
+            완성된 이미지를 패들렛 갤러리에 업로드해요.</p>
+
+        </div>
+
+        <!-- 휴대폰 작성 -->
+        <div class="step">
+
+            <h3>📱 휴대폰에서 작성</h3>
+
+            <p><strong>📱 1단계</strong><br>
+            스마트폰에서 원하는 활동의 AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
+
+            <p><strong>📋 2단계</strong><br>
+            <b>「프롬프트 복사」</b> 버튼을 클릭해요.</p>
+
+            <p><strong>✨ 3단계</strong><br>
+            본인의 ChatGPT(또는 이미지 생성 AI)에 바로 붙여넣어 카드를 생성해요.</p>
+
+            <p><strong>🖼 4단계</strong><br>
+            완성된 이미지를 패들렛 갤러리에 업로드해요.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card prompt-card" id="activity1">
+
+<div class="prompt-title">
+<h2>① AI 나(Na)다움 연구소 : AI로 만드는 나의 스토리 카드</h2>
+</div>
+<div class="prompt-tagline">🧩 「내가 살아온 모든 시간이 나의 자산」</div>
+
+<textarea id="prompt1" autocomplete="off"># AI 나의 스토리 카드
+
+지금까지 내가 살아오면서 해온 다양한 경험을
+하나의 멋진 이야기로 연결해줘.
+
+직업이나 공식적인 경력뿐 아니라
+가족을 돌본 경험, 사람을 도운 경험,
+취미, 공부, 봉사, 동아리, 여행, 지역활동 등
+내가 해온 모든 경험을 살펴봐줘.
+
+[나의 이야기]
+지금까지 내가 해온 일: 회사에서 프로젝트와 업무를 맡아 일해왔다.
+내가 오랫동안 해온 역할: 팀에서 문제를 해결하고 필요한 일을 찾아 실행하는 역할을 해왔다.
+누군가를 도와주거나 챙겼던 경험: 동료가 어려움을 겪을 때 업무 방법을 알려주거나 함께 해결했다.
+내가 책임지고 해낸 일: 중요한 프로젝트의 담당자로서 일정과 결과를 책임지고 마무리했다.
+내가 배우거나 도전했던 것: 업무와 관련된 새로운 기술을 배우고 다른 분야에도 도전했다.
+내가 좋아서 계속해온 것: 운동, 음악, 게임, 여행처럼 몰입할 수 있는 활동을 꾸준히 해왔다.
+앞으로 이어가고 싶은 경험: 내가 가진 전문성을 활용해 새로운 분야와 사람들에게 도전해보고 싶다.
+
+이 내용을 바탕으로
+
+① 내가 해온 주요 역할 3가지
+② 각각의 경험에서 얻은 능력
+③ 서로 다른 경험을 연결하는 나만의 공통 강점
+④ 내가 가진 '숨은 경력' 3가지
+⑤ 앞으로 활용할 수 있는 나의 경험
+⑥ 나를 표현하는 핵심 키워드 5개
+
+를 찾아줘.
+
+그리고 나의 이야기를 한 장의 카드로 만들어줘.
+
+━━━━━━━━━━━━
+🦋 MY STORY CARD
+
+나는 __________________한 사람입니다.
+
+내가 걸어온 길:
+________________________
+
+내가 가진 경험:
+________________________
+
+나의 숨은 경력:
+________________________
+
+나의 강점:
+________________________
+
+내가 중요하게 생각하는 가치:
+________________________
+
+앞으로 이어가고 싶은 것:
+________________________
+
+✨ 나의 이야기를 한 문장으로:
+"________________________"
+━━━━━━━━━━━━
+
+마지막 문장은 내가 살아온 시간을
+긍정적으로 바라볼 수 있도록 따뜻하고 인상적으로 만들어줘.
+
+MY STORY CARD는 아래와 같이 만들어줘.
+세로형 A3 비율의 감성적인 퍼스널 스토리 카드 / 자기소개 인포그래픽 포스터.
+한 사람의 다양한 경험과 역할, 능력, 성장 이야기를 하나의 따뜻하고 아름다운 이야기로 시각화한 카드 디자인.
+전체적으로 따뜻한 크림색 종이 배경 + 파스텔 퍼플, 핑크, 블루, 그린, 오렌지 포인트 컬러를 사용한다.
+전문적인 인포그래픽이지만 딱딱하지 않고, 손으로 그린 듯한 감성적인 일러스트와 부드러운 수채화 느낌을 결합한다.</textarea>
+
+<div class="counter"><span id="count1">0</span> 글자</div>
+
+<div class="buttons">
+<button class="copy" onclick="copyPrompt('prompt1')">📋 프롬프트 복사</button>
+<button class="clear" onclick="clearPrompt('prompt1')">🗑 초기화</button>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🔗 바로가기</h2>
+
+<div class="links">
+
+<a class="link-btn gallery"
+href="https://padlet.com/vip2026/padlet-s0235sexj8os3pxkw55c"
+target="_blank">
+
+🖼 패들렛 갤러리
+
+</a>
+
+<a class="link-btn prompt-link"
+href="https://padlet.com/vip2026/ai-na-s0235tqcr8ljmtqmxnzc"
+target="_blank">
+
+💾 프롬프트 저장
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+© 2026 서초나비코치단<br>
+AI로 만드는 나(Na)의 미래 체험부스
+
+</footer>
+
+<div id="toast" class="toast">
+✔ 프롬프트가 복사되었습니다.
+</div>
+
+<script>
+
+const ids=["prompt1"];
+const defaults={};
+
+ids.forEach(id=>{
+
+const textarea=document.getElementById(id);
+const count=document.getElementById("count"+id.slice(-1));
+
+defaults[id]=textarea.value;
+
+textarea.addEventListener("input",()=>{
+count.innerText=textarea.value.length;
+localStorage.setItem(id,textarea.value);
+});
+
+});
+
+window.onload=()=>{
+
+ids.forEach(id=>{
+
+const textarea=document.getElementById(id);
+const count=document.getElementById("count"+id.slice(-1));
+const saved=localStorage.getItem(id);
+
+if(saved){
+textarea.value=saved;
+}
+
+count.innerText=textarea.value.length;
+
+});
+
+}
+
+function copyPrompt(id){
+
+const textarea=document.getElementById(id);
+
+navigator.clipboard.writeText(textarea.value);
+
+const toast=document.getElementById("toast");
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+},2000);
+
+}
+
+function clearPrompt(id){
+
+if(confirm("작성한 내용을 지우고 기본 프롬프트로 되돌리시겠습니까?")){
+
+localStorage.removeItem(id);
+
+const textarea=document.getElementById(id);
+const count=document.getElementById("count"+id.slice(-1));
+
+textarea.value=defaults[id];
+count.innerText=defaults[id].length;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
