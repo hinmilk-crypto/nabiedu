@@ -162,6 +162,16 @@ color:#666;
 line-height:1.6;
 }
 
+.activity .qr{
+margin-top:16px;
+width:100px;
+height:100px;
+border-radius:10px;
+background:white;
+padding:6px;
+box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
 .closing{
 text-align:center;
 margin-top:28px;
@@ -380,9 +390,6 @@ AI에게 나의 경험과 관심사를 알려주고<br>
 자신의 가능성을 펼칠 수 있도록!
 </div>
 
-<img
-src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmilk-crypto.github.io/nabiedu/seochogef.html">
-
 </section>
 
 <div class="wrapper">
@@ -395,20 +402,16 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 
         <div class="activity" onclick="document.getElementById('activity1').scrollIntoView({behavior:'smooth', block:'start'})">
             <span class="num">1</span>
-            <h3>AI 나다움 연구소</h3>
-            <p>나를 만드는 건 성별이 아니라<br>나의 가능성</p>
+            <h3>AI 나(Na)다움 연구소</h3>
+            <p><strong>AI로 만드는 나의 스토리 카드</strong><br>성별의 경계를 넘어,<br>나다운 가능성을 발견해요.</p>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmilk-crypto.github.io/nabiedu/seochogef.html">
         </div>
 
-        <div class="activity" onclick="document.getElementById('activity2').scrollIntoView({behavior:'smooth', block:'start'})">
+        <div class="activity" onclick="window.open('https://polite-druid-9293b4.netlify.app/','_blank')">
             <span class="num">2</span>
-            <h3>AI 미래명함 제작소</h3>
-            <p>정해진 역할은 NO!<br>내가 만드는 나의 미래</p>
-        </div>
-
-        <div class="activity" onclick="document.getElementById('activity3').scrollIntoView({behavior:'smooth', block:'start'})">
-            <span class="num">3</span>
-            <h3>AI 가능성 공방</h3>
-            <p>성별의 경계를 넘어,<br>나답게 펼치는 가능성</p>
+            <h3>나(Na) 미래명함 제작소</h3>
+            <p><strong>내가 만드는 나의 미래명함</strong><br>정해진 역할을 넘어,<br>내가 원하는 미래를 그려봐요.</p>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://polite-druid-9293b4.netlify.app/">
         </div>
 
     </div>
@@ -474,138 +477,11 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 <div class="card prompt-card" id="activity1">
 
 <div class="prompt-title">
-<h2>① AI 나다움 연구소 : AI로 발견하는 나의 가능성</h2>
-</div>
-<div class="prompt-tagline">🔎 「내가 몰랐던 나를 찾아줘!」</div>
-
-<textarea id="prompt1" autocomplete="off"># AI 나의 가능성 발견소
-
-내가 지금까지 살아오면서 해온 경험과 좋아하는 것을 바탕으로
-내가 미처 발견하지 못했던 나의 강점과 가능성을 찾아줘.
-
-아래 질문에 자유롭게 답할게.
-짧게 적어도 되고, 생각나는 대로 적어도 돼.
-
-[나에 대해]
-1. 내가 요즘 주로 하는 일:
-2. 내가 잘하거나 자신 있는 것:
-3. 주변 사람들이 나에게 자주 하는 말:
-4. 내가 좋아하고 즐거워하는 것:
-5. 지금까지 해본 일 중 기억에 남는 것:
-6. 앞으로 한번 해보고 싶은 것:
-
-이 내용을 바탕으로 나를 분석해줘.
-
-① 나의 숨은 강점 3가지
-② 내가 가진 특별한 능력 3가지
-③ 나에게 어울리는 새로운 가능성 3가지
-④ 나를 표현하는 키워드 5개
-⑤ 내가 미처 몰랐던 나의 모습 1가지
-
-그리고 마지막에 아래 형식으로
-'나의 가능성 카드'를 만들어줘.
-
-━━━━━━━━━━━━
-🌱 MY POSSIBILITY CARD
-
-나는 ______한 사람입니다.
-
-나의 강점:
-나의 가능성:
-나를 표현하는 키워드:
-
-✨ 내가 몰랐던 나:
-“________________________”
-
-🚀 오늘 발견한 나의 가능성:
-“________________________”
-━━━━━━━━━━━━
-
-마지막 문장은 짧고 인상적으로 만들어줘.</textarea>
-
-<div class="counter"><span id="count1">0</span> 글자</div>
-
-<div class="buttons">
-<button class="copy" onclick="copyPrompt('prompt1')">📋 프롬프트 복사</button>
-<button class="clear" onclick="clearPrompt('prompt1')">🗑 초기화</button>
-</div>
-
-</div>
-
-<div class="card prompt-card" id="activity2">
-
-<div class="prompt-title">
-<h2>② AI 미래명함 제작소 : AI로 만드는 나의 미래 명함</h2>
-</div>
-<div class="prompt-tagline">💼 「10년 후 나는 어떤 명함을 가지고 있을까?」</div>
-
-<textarea id="prompt2" autocomplete="off"># AI 미래명함 제작소
-
-지금의 나를 바탕으로
-'미래의 나'를 상상해서 나만의 미래 명함을 만들어줘.
-
-미래의 직업을 꼭 기존에 있는 직업으로 정하지 않아도 돼.
-내 경험과 관심사, 좋아하는 것들을 연결해서
-새롭고 재미있는 미래의 역할을 제안해줘.
-
-[나에 대해]
-1. 지금 내가 하고 있는 일/역할:
-2. 지금까지 해온 일:
-3. 내가 잘하는 것:
-4. 내가 좋아하는 것:
-5. 내가 가진 재능이나 경험:
-6. 앞으로 해보고 싶은 것:
-7. 내가 만들고 싶은 삶:
-
-이 내용을 바탕으로
-
-① 나의 핵심 강점 3가지
-② 나의 경험에서 발견되는 능력 3가지
-③ 나에게 어울리는 미래의 역할 3가지
-④ 내가 만들어갈 수 있는 가치 1가지
-
-를 찾아줘.
-
-그리고 가장 잘 어울리는 미래의 나를 하나 선택해서
-'미래 명함'을 만들어줘.
-
-━━━━━━━━━━━━
-✨ MY FUTURE BUSINESS CARD
-
-이름:
-미래의 직함:
-나를 표현하는 키워드 3개:
-내가 잘하는 것:
-내가 제공하는 가치:
-내가 만들고 싶은 변화:
-
-한 줄 자기소개:
-“________________________”
-
-나의 미래 슬로건:
-“________________________”
-━━━━━━━━━━━━
-
-직함은 재미있고 개성 있게 만들어줘.
-실제로 존재하는 직업과 새로운 직업을 섞어도 좋아.</textarea>
-
-<div class="counter"><span id="count2">0</span> 글자</div>
-
-<div class="buttons">
-<button class="copy" onclick="copyPrompt('prompt2')">📋 프롬프트 복사</button>
-<button class="clear" onclick="clearPrompt('prompt2')">🗑 초기화</button>
-</div>
-
-</div>
-
-<div class="card prompt-card" id="activity3">
-
-<div class="prompt-title">
-<h2>③ AI 가능성 공방 : AI로 만드는 나의 스토리 카드</h2>
+<h2>① AI 나(Na)다움 연구소 : AI로 만드는 나의 스토리 카드</h2>
 </div>
 <div class="prompt-tagline">🧩 「내가 살아온 모든 시간이 나의 자산」</div>
 
-<textarea id="prompt3" autocomplete="off"># AI 나의 스토리 카드
+<textarea id="prompt1" autocomplete="off"># AI 나의 스토리 카드
 
 지금까지 내가 살아오면서 해온 다양한 경험을
 하나의 멋진 이야기로 연결해줘.
@@ -616,13 +492,13 @@ src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmi
 내가 해온 모든 경험을 살펴봐줘.
 
 [나의 이야기]
-1. 지금까지 내가 해온 일:
-2. 내가 오랫동안 해온 역할:
-3. 누군가를 도와주거나 챙겼던 경험:
-4. 내가 책임지고 해낸 일:
-5. 내가 배우거나 도전했던 것:
-6. 내가 좋아서 계속해온 것:
-7. 앞으로 이어가고 싶은 경험:
+지금까지 내가 해온 일: 회사에서 프로젝트와 업무를 맡아 일해왔다.
+내가 오랫동안 해온 역할: 팀에서 문제를 해결하고 필요한 일을 찾아 실행하는 역할을 해왔다.
+누군가를 도와주거나 챙겼던 경험: 동료가 어려움을 겪을 때 업무 방법을 알려주거나 함께 해결했다.
+내가 책임지고 해낸 일: 중요한 프로젝트의 담당자로서 일정과 결과를 책임지고 마무리했다.
+내가 배우거나 도전했던 것: 업무와 관련된 새로운 기술을 배우고 다른 분야에도 도전했다.
+내가 좋아서 계속해온 것: 운동, 음악, 게임, 여행처럼 몰입할 수 있는 활동을 꾸준히 해왔다.
+앞으로 이어가고 싶은 경험: 내가 가진 전문성을 활용해 새로운 분야와 사람들에게 도전해보고 싶다.
 
 이 내용을 바탕으로
 
@@ -661,7 +537,7 @@ ________________________
 ________________________
 
 ✨ 나의 이야기를 한 문장으로:
-“________________________”
+"________________________"
 ━━━━━━━━━━━━
 
 마지막 문장은 내가 살아온 시간을
@@ -673,11 +549,11 @@ MY STORY CARD는 아래와 같이 만들어줘.
 전체적으로 따뜻한 크림색 종이 배경 + 파스텔 퍼플, 핑크, 블루, 그린, 오렌지 포인트 컬러를 사용한다.
 전문적인 인포그래픽이지만 딱딱하지 않고, 손으로 그린 듯한 감성적인 일러스트와 부드러운 수채화 느낌을 결합한다.</textarea>
 
-<div class="counter"><span id="count3">0</span> 글자</div>
+<div class="counter"><span id="count1">0</span> 글자</div>
 
 <div class="buttons">
-<button class="copy" onclick="copyPrompt('prompt3')">📋 프롬프트 복사</button>
-<button class="clear" onclick="clearPrompt('prompt3')">🗑 초기화</button>
+<button class="copy" onclick="copyPrompt('prompt1')">📋 프롬프트 복사</button>
+<button class="clear" onclick="clearPrompt('prompt1')">🗑 초기화</button>
 </div>
 
 </div>
@@ -723,7 +599,7 @@ AI로 만드는 나(Na)의 미래 체험부스
 
 <script>
 
-const ids=["prompt1","prompt2","prompt3"];
+const ids=["prompt1"];
 const defaults={};
 
 ids.forEach(id=>{
