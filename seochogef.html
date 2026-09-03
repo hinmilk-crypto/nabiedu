@@ -162,16 +162,6 @@ color:#666;
 line-height:1.6;
 }
 
-.activity .qr{
-margin-top:16px;
-width:100px;
-height:100px;
-border-radius:10px;
-background:white;
-padding:6px;
-box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-
 .closing{
 text-align:center;
 margin-top:28px;
@@ -390,6 +380,9 @@ AI에게 나의 경험과 관심사를 알려주고<br>
 자신의 가능성을 펼칠 수 있도록!
 </div>
 
+<img
+src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmilk-crypto.github.io/nabiedu/seochogef.html">
+
 </section>
 
 <div class="wrapper">
@@ -402,16 +395,8 @@ AI에게 나의 경험과 관심사를 알려주고<br>
 
         <div class="activity" onclick="document.getElementById('activity1').scrollIntoView({behavior:'smooth', block:'start'})">
             <span class="num">1</span>
-            <h3>AI 나(Na)다움 연구소</h3>
-            <p><strong>AI로 만드는 나의 스토리 카드</strong><br>성별의 경계를 넘어,<br>나다운 가능성을 발견해요.</p>
-            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://hinmilk-crypto.github.io/nabiedu/seochogef.html">
-        </div>
-
-        <div class="activity" onclick="window.open('https://polite-druid-9293b4.netlify.app/','_blank')">
-            <span class="num">2</span>
-            <h3>나(Na) 미래명함 제작소</h3>
-            <p><strong>내가 만드는 나의 미래명함</strong><br>정해진 역할을 넘어,<br>내가 원하는 미래를 그려봐요.</p>
-            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://polite-druid-9293b4.netlify.app/">
+            <h3>AI 나(Na)다움 연구소<br>AI로 만드는 나의 스토리 카드</h3>
+            <p>성별의 경계를 넘어,<br>나다운 가능성을 발견해요.</p>
         </div>
 
     </div>
@@ -435,7 +420,7 @@ AI에게 나의 경험과 관심사를 알려주고<br>
             <h3>💻 PC에서 작성</h3>
 
             <p><strong>🖥 1단계</strong><br>
-            원하는 활동을 골라 AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
+            AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
 
             <p><strong>📋 2단계</strong><br>
             <b>「프롬프트 복사」</b> 버튼을 클릭해요.</p>
@@ -457,7 +442,7 @@ AI에게 나의 경험과 관심사를 알려주고<br>
             <h3>📱 휴대폰에서 작성</h3>
 
             <p><strong>📱 1단계</strong><br>
-            스마트폰에서 원하는 활동의 AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
+            스마트폰에서 AI 프롬프트를 확인하고, 필요한 부분을 자유롭게 적어넣어요.</p>
 
             <p><strong>📋 2단계</strong><br>
             <b>「프롬프트 복사」</b> 버튼을 클릭해요.</p>
@@ -477,9 +462,8 @@ AI에게 나의 경험과 관심사를 알려주고<br>
 <div class="card prompt-card" id="activity1">
 
 <div class="prompt-title">
-<h2>① AI 나(Na)다움 연구소 : AI로 만드는 나의 스토리 카드</h2>
+<h2>AI 나(Na)다움 연구소 : AI로 만드는 나의 스토리 카드</h2>
 </div>
-<div class="prompt-tagline">🧩 「내가 살아온 모든 시간이 나의 자산」</div>
 
 <textarea id="prompt1" autocomplete="off"># AI 나의 스토리 카드
 
@@ -537,7 +521,7 @@ ________________________
 ________________________
 
 ✨ 나의 이야기를 한 문장으로:
-"________________________"
+“________________________”
 ━━━━━━━━━━━━
 
 마지막 문장은 내가 살아온 시간을
