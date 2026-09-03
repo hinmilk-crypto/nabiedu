@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+  <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=48cefcd4-eb1e-4654-924d-61738e212369
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=48cefcd4-eb1e-4654-924d-61738e212369">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="미래명함">
+  <meta name="theme-color" content="#4f46e5">
+  <meta property="og:title" content="AI 미래명함 제작소">
+  <meta property="og:description" content="링크를 누르면 내 AI 미래명함이 바로 실행됩니다!">
+  <meta property="og:type" content="website">
+  <title>AI 미래명함 제작소 - 모바일 웹앱</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2canvas for card export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Pen+Script&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      overscroll-behavior-y: contain;
+      touch-action: manipulation;
+    }
+    .font-batang { font-family: 'Gowun Batang', serif; }
+    .font-pen { font-family: 'Nanum Pen Script', cursive; }
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+
+    /* Card Background Themes */
+    .bg-card-yellow { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%); }
+    .bg-card-white { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%); }
+    .bg-card-pink { background: linear-gradient(135deg, #fff1f2 0%, #fce7f3 50%, #fbcfe8 100%); }
+    .bg-card-blue { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%); }
+    .bg-card-dark { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%); color: #f8fafc !important; }
+    .bg-card-cyber { background: linear-gradient(135deg, #2e1065 0%, #581c87 50%, #831843 100%); color: #f472b6 !important; }
+    .bg-card-nature { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%); }
+
+    /* Touch Friendly Draggable Stickers */
+    .sticker-item {
+      touch-action: none;
+      position: absolute;
+      transform-origin: center center;
+      cursor: move;
+    }
+
+    /* Floating animation */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+    .animate-float { animation: floatSlow 5s ease-in-out infinite; }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+  </style>
+<style>
+#cardName{font-size:calc(0.875rem + 3pt)!important;letter-spacing:2px!important;}
+@media (min-width:640px){#cardName{font-size:calc(1.5rem + 3pt)!important;}}
+#cardContact{font-size:calc(8px + 5pt)!important;opacity:.95!important;margin-top:.65rem!important;line-height:1.6!important;gap:.35rem!important;}
+@media (min-width:640px){#cardContact{font-size:calc(11px + 3pt)!important;}}
+#cardContact span{line-height:1.6!important;}
+#cardContainer .relative.z-10{padding-bottom:1.25rem!important;}
+#cardValue{display:inline-block;min-width:0;max-width:100%;padding-right:.5rem;}
+</style>
+
+<style id="standardBusinessCardRatio">
+  /* Standard Korean business card: 90 × 50 mm = 1.8 : 1 */
+  #cardContainer{
+    width:100%!important;
+    aspect-ratio:9/5!important;
+    min-height:0!important;
+    height:auto!important;
+  }
+  #cardContainer .relative.z-10{
+    min-height:0!important;
+    height:100%!important;
+    padding-bottom:1.25rem!important;
+    box-sizing:border-box!important;
+  }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-full flex flex-col antialiased selection:bg-indigo-500 selection:text-white pb-16 lg:pb-0">
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-sm px-4 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-semibold transition-all duration-300 transform -translate-y-12 opacity-0 pointer-events-none flex items-center justify-center space-x-2 text-center backdrop-blur-md"></div>
+
+  <!-- Mobile Save & Share Modal -->
+  <div id="mobileImageModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex-col items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl border border-slate-100 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between w-full pb-2 border-b border-slate-100">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+          <span>📱</span> 모바일 명함 저장 & 공유
+        </h3>
+        <button onclick="closeMobileModal()" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        이미지를 <strong class="text-indigo-600 font-bold">길게 눌러</strong> 사진 앱에 저장하거나 아래 버튼으로 친구들에게 전달해보세요!
+      </p>
+      <div class="w-full rounded-2xl overflow-hidden shadow-inner border border-slate-200 bg-slate-50 p-1.5">
+        <img id="mobileModalImg" src="" alt="생성된 미래명함" class="w-full h-auto rounded-xl object-contain">
+      </div>
+      <div class="grid grid-cols-3 gap-2 w-full pt-1">
+        <button id="btnMobileDownload" onclick="saveMobileImage()" class="py-3 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>이미지 저장</span>
+        </button>
+        <button id="btnMobileShare" onclick="shareGeneratedCard()" class="py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+          <i data-lucide="share-2" class="w-4 h-4"></i>
+          <span>이미지 공유</span>
+        </button>
+        <button onclick="copyShareLink()" class="py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+          <i data-lucide="link" class="w-4 h-4"></i>
+          <span>직접 실행 링크 복사</span>
+        </button>
+      </div>
+      <button onclick="closeMobileModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+        닫기
+      </button>
+    </div>
+  </div>
+
+  <!-- Saved Cards Gallery Modal -->
+  <div id="galleryModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex-col items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] p-5 flex flex-col shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
+          <i data-lucide="bookmark" class="w-4 h-4 text-indigo-600"></i> 저장된 미래 명함 보관함
+        </h3>
+        <button onclick="closeGalleryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="galleryList" class="flex-1 overflow-y-auto py-4 space-y-4 pr-1">
+        <!-- Saved Cards dynamically rendered here -->
+      </div>
+      <div class="pt-3 border-t border-slate-100 text-right">
+        <button onclick="closeGalleryModal()" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="p-2 bg-gradient-to-tr from-indigo-600 to-pink-500 text-white rounded-2xl shadow-sm">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 leading-tight">
+            AI 미래명함 제작소
+          </h1>
+          <p class="text-[10px] sm:text-xs text-slate-500 font-medium">나(Na)만의 독창적인 미래 직함 만들기</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <button onclick="openGalleryModal()" class="p-2 sm:px-3 sm:py-1.5 bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-indigo-200/60">
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">보관함</span>
+          <span id="galleryBadge" class="bg-indigo-600 text-white text-[10px] px-1.5 py-0.2 rounded-full hidden">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Tab Navigation Bar (Visible on screens smaller than lg) -->
+  <nav class="lg:hidden bg-white border-b border-slate-200 px-2 py-1.5 sticky top-[57px] z-20 shadow-xs flex justify-around text-xs font-bold text-slate-500">
+    <button id="tabBtnInput" onclick="switchTab('input')" class="flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition text-indigo-600 bg-indigo-50">
+      <i data-lucide="edit-3" class="w-4 h-4"></i>
+      <span>1. 정보 입력</span>
+    </button>
+    <button id="tabBtnAnalysis" onclick="switchTab('analysis')" class="flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition hover:text-slate-800">
+      <i data-lucide="cpu" class="w-4 h-4"></i>
+      <span>2. AI 분석</span>
+    </button>
+    <button id="tabBtnCard" onclick="switchTab('card')" class="flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition hover:text-slate-800">
+      <i data-lucide="credit-card" class="w-4 h-4"></i>
+      <span>3. 명함 꾸미기</span>
+    </button>
+  </nav>
+
+  <!-- Main Grid Container -->
+  <main class="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+    
+    <!-- LEFT SECTION: Input Form & AI Analysis -->
+    <section id="sectionInput" class="lg:col-span-6 space-y-4 sm:space-y-5">
+      
+      <!-- Intro Card -->
+      <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-4 sm:p-5 rounded-3xl text-white shadow-md relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+        <h2 class="text-sm sm:text-base font-black mb-1 flex items-center gap-2">
+          <span>🦋</span> 내 삶의 경험으로 새 직업 만들기
+        </h2>
+        <p class="text-xs opacity-90 leading-relaxed font-light">
+          기존에 존재하지 않던 나만의 역할과 직함을 AI가 발견해드립니다. 소소한 취미, 잘하는 일, 가치관을 솔직하게 자유롭게 적어보세요!
+        </p>
+      </div>
+
+      <!-- Question Form Card -->
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-slate-200/80 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="user-check" class="w-4 h-4 text-indigo-600"></i> 기본 프로필
+          </h3>
+          <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Step 1</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">이름 또는 닉네임 <span class="text-rose-500">*</span></label>
+          <input type="text" id="inputName" placeholder="예: 김미래 / 루나" oninput="updateContactInfo()" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">연락처 (선택)</label>
+            <input type="tel" id="inputPhone" placeholder="010-0000-0000" oninput="updateContactInfo()" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">이메일 (선택)</label>
+            <input type="email" id="inputEmail" placeholder="future@example.com" oninput="updateContactInfo()" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 space-y-3">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4 text-indigo-600"></i> 나에 대한 7가지 질문
+          </h3>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">1. 지금 내가 하고 있는 일/역할</label>
+            <textarea id="q1" rows="2" placeholder="예: 마케터, 학생, 육아 중인 부모, 자유로운 탐험가 등" class="w-full px-3.5 py-2 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">2. 지금까지 해온 다양한 일/경험</label>
+            <textarea id="q2" rows="2" placeholder="예: 블로그 글쓰기, 동아리 기획, 카페 알바, 해외 배낭여행" class="w-full px-3.5 py-2 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">3. 내가 자신있거나 잘하는 것</label>
+            <input type="text" id="q3" placeholder="예: 남 이야기 잘 들어주기, 그림 그리기, 요리, 분위기 띄우기" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">4. 내가 좋아하는 일이나 취미</label>
+            <input type="text" id="q4" placeholder="예: 우주/천문학, 차 마시기, 반려견 산책, 식물 가꾸기" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">5. 나의 숨은 재능이나 특기</label>
+            <textarea id="q5" rows="2" placeholder="예: 공감능력, 사물의 숨은 가치를 밝혀내는 직관, 순발력" class="w-full px-3.5 py-2 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">6. 앞으로 꼭 도전해보고 싶은 것</label>
+            <input type="text" id="q6" placeholder="예: 나만의 브랜드 런칭, 책 쓰기, 오프로드 캠핑" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">7. 내가 세상에 만들고 싶은 가치</label>
+            <input type="text" id="q7" placeholder="예: 지친 사람들에게 따뜻한 휴식을 주는 라이프스타일" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+          </div>
+        </div>
+
+        <button id="btnGenerate" onclick="generateFutureCard()" class="w-full py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 text-white font-black rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.98] transition duration-200 flex items-center justify-center space-x-2 cursor-pointer">
+          <i data-lucide="wand-2" class="w-5 h-5"></i>
+          <span class="text-sm sm:text-base">AI 미래 분석 & 명함 생성하기</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- MIDDLE/AI ANALYSIS PANEL (Used for mobile tab 2 & desktop view) -->
+    <section id="sectionAnalysis" class="lg:col-span-6 hidden lg:block space-y-4">
+      <div id="analysisPanel" class="bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="cpu" class="w-4 h-4 text-emerald-600"></i> AI 심층 미래 분석
+          </h3>
+          <span id="analysisBadge" class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">대기 중</span>
+        </div>
+
+        <div id="emptyAnalysisText" class="text-center py-10 text-slate-400 text-xs">
+          <i data-lucide="sparkles" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+          왼쪽 질문을 작성하고 'AI 명함 생성하기'를 눌러보세요!
+        </div>
+
+        <div id="analysisContent" class="hidden space-y-4 text-xs sm:text-sm">
+          <div>
+            <span class="font-bold text-indigo-700 block mb-1">① 나만의 핵심 강점 TOP 3</span>
+            <div id="resStrengths" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <div>
+            <span class="font-bold text-indigo-700 block mb-1">② 경험에서 발굴된 역량 TOP 3</span>
+            <div id="resAbilities" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <div>
+            <span class="font-bold text-indigo-700 block mb-1">③ 추천 미래 직함 3가지 (원하는 직함을 선택하세요)</span>
+            <div id="resRoles" class="space-y-1.5 mt-1"></div>
+          </div>
+
+          <div>
+            <span class="font-bold text-indigo-700 block mb-1">④ 내가 세상에 전달할 핵심 가치</span>
+            <p id="resValue" class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs italic leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT SECTION: Card Customization & Live Canvas Preview -->
+    <section id="sectionCard" class="lg:col-span-6 space-y-4 hidden lg:block">
+      
+      <!-- Customization Tools Container -->
+      <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-slate-200/80 space-y-3.5">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="palette" class="w-4 h-4 text-indigo-500"></i> 명함 디자인 커스텀
+          </h3>
+          <span class="text-[10px] font-bold text-slate-500">Step 3. 스타일링</span>
+        </div>
+
+        <!-- Color Themes Palette -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">테마 스킨 선택:</label>
+          <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
+            <button onclick="setCardColor('yellow')" class="p-2 rounded-xl border border-amber-200 bg-amber-50 flex flex-col items-center gap-1 active:scale-95 transition" title="Warm Yellow">
+              <span class="w-3.5 h-3.5 rounded-full bg-amber-300 border"></span>
+              <span class="text-[9px] font-bold text-slate-700">노랑</span>
+            </button>
+            <button onclick="setCardColor('white')" class="p-2 rounded-xl border border-slate-200 bg-slate-50 flex flex-col items-center gap-1 active:scale-95 transition" title="Minimal White">
+              <span class="w-3.5 h-3.5 rounded-full bg-white border border-slate-300"></span>
+              <span class="text-[9px] font-bold text-slate-700">화이트</span>
+            </button>
+            <button onclick="setCardColor('pink')" class="p-2 rounded-xl border border-pink-200 bg-pink-50 flex flex-col items-center gap-1 active:scale-95 transition" title="Pastel Pink">
+              <span class="w-3.5 h-3.5 rounded-full bg-pink-300 border"></span>
+              <span class="text-[9px] font-bold text-slate-700">핑크</span>
+            </button>
+            <button onclick="setCardColor('blue')" class="p-2 rounded-xl border border-sky-200 bg-sky-50 flex flex-col items-center gap-1 active:scale-95 transition" title="Pastel Blue">
+              <span class="w-3.5 h-3.5 rounded-full bg-sky-300 border"></span>
+              <span class="text-[9px] font-bold text-slate-700">블루</span>
+            </button>
+            <button onclick="setCardColor('nature')" class="p-2 rounded-xl border border-emerald-200 bg-emerald-50 flex flex-col items-center gap-1 active:scale-95 transition" title="Forest Mint">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-300 border"></span>
+              <span class="text-[9px] font-bold text-slate-700">민트</span>
+            </button>
+            <button onclick="setCardColor('dark')" class="p-2 rounded-xl border border-slate-700 bg-slate-800 text-white flex flex-col items-center gap-1 active:scale-95 transition" title="Premium Dark">
+              <span class="w-3.5 h-3.5 rounded-full bg-slate-900 border border-slate-600"></span>
+              <span class="text-[9px] font-bold">다크</span>
+            </button>
+            <button onclick="setCardColor('cyber')" class="p-2 rounded-xl border border-purple-500 bg-purple-900 text-white flex flex-col items-center gap-1 active:scale-95 transition" title="Cyber Violet">
+              <span class="w-3.5 h-3.5 rounded-full bg-fuchsia-500 border border-fuchsia-300"></span>
+              <span class="text-[9px] font-bold">네온</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Typography & Text Color -->
+        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">서체 Style:</label>
+            <select onchange="changeCardFont(this.value)" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-xl focus:outline-none">
+              <option value="sans">고딕 (기본/깔끔)</option>
+              <option value="batang">바탕 (감성/명조)</option>
+              <option value="pen">손글씨 (친근함)</option>
+              <option value="orbitron">Futuristic (미래적)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">글자 색상:</label>
+            <div class="flex items-center space-x-2">
+              <input type="color" id="textColorPicker" value="#1e293b" onchange="changeTextColor(this.value)" class="w-8 h-8 rounded-xl border border-slate-300 cursor-pointer p-0 bg-transparent">
+              <span class="text-[10px] text-slate-500">커스텀 폰트색</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touch Interactive Stickers -->
+        <div class="pt-2 border-t border-slate-100 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-600">터치 스티커 추가:</span>
+            <div class="flex items-center gap-1">
+              <button onclick="rotateSelectedSticker(-15)" class="p-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="왼쪽 회전">↺</button>
+              <button onclick="rotateSelectedSticker(15)" class="p-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="오른쪽 회전">↻</button>
+              <button onclick="scaleSelectedSticker(0.2)" class="p-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="확대">+</button>
+              <button onclick="scaleSelectedSticker(-0.2)" class="p-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="축소">-</button>
+              <button onclick="removeSelectedSticker()" class="p-1 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg text-xs" title="삭제">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="addSticker('🦋')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">🦋</button>
+            <button onclick="addSticker('✨')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">✨</button>
+            <button onclick="addSticker('💖')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">💖</button>
+            <button onclick="addSticker('🚀')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">🚀</button>
+            <button onclick="addSticker('🌱')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">🌱</button>
+            <button onclick="addSticker('👑')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">👑</button>
+            <button onclick="addSticker('⭐')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">⭐</button>
+            <button onclick="addSticker('🔮')" class="p-2 bg-slate-50 hover:bg-slate-100 active:scale-90 rounded-xl text-lg transition">🔮</button>
+            <button onclick="clearAllStickers()" class="px-2.5 py-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-[10px] font-bold ml-auto">전체 초기화</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- THE CARD PREVIEW GRAPHIC -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between px-1">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <i data-lucide="eye" class="w-3.5 h-3.5"></i> 실물 명함 미리보기
+          </h3>
+          <span class="text-[10px] text-slate-400">터치/드래그로 스티커 이동</span>
+        </div>
+
+        <div id="cardContainer" class="relative w-full aspect-[1.8/1] min-h-[300px] sm:min-h-[320px] rounded-3xl p-4 sm:p-6 shadow-2xl overflow-visible border border-slate-200/60 transition-all duration-300 bg-card-yellow flex flex-col justify-between" style="color: #1e293b;">
+          
+          <!-- Background Butterfly Art -->
+          <div class="absolute bottom-3 right-3 opacity-15 pointer-events-none animate-float">
+            <svg width="80" height="80" viewBox="0 0 100 100" fill="currentColor" class="w-16 h-16 sm:w-24 sm:h-24">
+              <path d="M50,45 C40,20 10,15 15,40 C18,55 35,55 48,48 C35,65 20,80 35,85 C50,90 48,60 50,52 C52,60 50,90 65,85 C80,80 65,65 52,48 C65,55 82,55 85,40 C90,15 60,20 50,45 Z" />
+            </svg>
+          </div>
+
+          <!-- Main Card Content -->
+          <div class="relative z-10 h-full flex flex-col justify-between pointer-events-none select-none">
+            
+            <!-- Top Card Header -->
+            <div class="flex justify-between items-start border-b border-current/15 pb-2">
+              <div>
+                <span class="text-[8px] sm:text-[10px] tracking-widest font-extrabold uppercase opacity-60 block">MY FUTURE BUSINESS CARD</span>
+                <div id="cardRole" class="text-[11px] sm:text-lg font-black tracking-tight mt-0.5 leading-snug break-words max-w-[62vw] sm:max-w-[360px]">
+                  꿈 현실화 아키텍트
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <span id="cardName" class="text-[15px] sm:text-[calc(1.5rem+1pt)] font-black block leading-tight break-words max-w-[38vw] sm:max-w-[180px]">
+                  홍길동
+                </span>
+                <div id="cardContact" class="text-[10px] sm:text-[13px] opacity-95 mt-2 flex flex-col items-end gap-1 leading-relaxed">
+                  <span id="cardPhone" class="hidden"></span>
+                  <span id="cardEmail" class="hidden"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Key Info -->
+            <div class="my-auto py-1 space-y-1 text-[9px] sm:text-xs leading-tight">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[8px] sm:text-[10px] font-bold opacity-70">키워드:</span>
+                <span id="cardKeywords" class="font-semibold text-[9px] sm:text-xs">
+                  #AI Literacy #Digital Wellness #Future Learning
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 gap-0.5 opacity-90">
+                <div class="break-words leading-snug"><span class="opacity-70 font-medium">강점/재능:</span> <span id="cardGoodAt">사람들의 잠재력을 경청하여 발굴</span></div>
+                <div class="break-words leading-snug"><span class="opacity-70 font-medium">제공가치:</span> <span id="cardValue">일상에 용기와 명확한 삶의 방향 제시</span></div>
+                <div class="break-words leading-snug"><span class="opacity-70 font-medium">만들 변화:</span> <span id="cardChange">모두가 자신만의 가치를 발견하는 사회</span></div>
+              </div>
+            </div>
+
+            <!-- Bottom Brand Copy -->
+            <div class="border-t border-current/15 pt-2">
+              <p class="text-[9px] sm:text-xs font-bold tracking-wide leading-relaxed break-words opacity-95">
+                <span id="cardIntro" class="hidden"></span>
+         <span id="cardSlogan">경험에 새로운 가능성을 더해, 더 나은 변화를 만듭니다.</span>
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Interactive Sticker Canvas Layer -->
+          <div id="stickerLayer" class="absolute inset-0 pointer-events-auto z-20 overflow-hidden"></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-3 gap-2 pt-1">
+        <button onclick="downloadCard()" class="py-3.5 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center space-x-1.5 text-xs cursor-pointer">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>이미지 저장</span>
+        </button>
+
+        <button onclick="copyShareLink()" class="py-3.5 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center space-x-1.5 text-xs cursor-pointer">
+          <i data-lucide="link" class="w-4 h-4"></i>
+          <span>링크 복사</span>
+        </button>
+
+        <button onclick="saveCardToGallery()" class="py-3.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 active:scale-95 text-indigo-700 font-bold rounded-2xl transition flex items-center justify-center space-x-1.5 text-xs cursor-pointer">
+          <i data-lucide="bookmark-plus" class="w-4 h-4"></i>
+          <span>보관함</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex-col items-center justify-center text-white px-4">
+    <div class="bg-white text-slate-800 p-6 rounded-3xl shadow-2xl flex flex-col items-center space-y-4 max-w-xs text-center border border-slate-100 animate-in fade-in zoom-in duration-200">
+      <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      <div>
+        <p class="font-black text-sm text-slate-900">AI가 미래의 역할을 분석 중입니다...</p>
+        <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">당신의 경험과 재능을 조합하여 세상에 없던 독창적인 명함을 생성하고 있어요.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Application State
+    const apiKey = "";
+    let activeTab = 'input';
+    let selectedSticker = null;
+    let currentCardDataUrl = null;
+    let savedCards = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      injectWebManifest();
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        try { lucide.createIcons(); } catch(e) {}
+      }
+      loadGalleryFromStorage();
+      updateContactInfo();
+      loadCardFromUrlParams();
+    });
+
+    // Dynamic Web App Manifest Injection for Standalone Mobile Execution
+    function injectWebManifest() {
+      // 현재는 별도 manifest 파일을 사용하지 않으므로 비워둡니다.
+    }
+
+    // Safe UTF-8 Base64 Encoding and Decoding for Mobile String Parsing
+    function utf8ToBase64(str) {
+      try {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => 
+          String.fromCharCode('0x' + p1)
+        ));
+      } catch (e) {
+        return encodeURIComponent(str);
+      }
+    }
+
+    function base64ToUtf8(str) {
+      try {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => 
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+      } catch (e) {
+        return decodeURIComponent(str);
+      }
+    }
+
+    // Generate Direct Execution URL with Encoded Card State
+    function getShareableLink() {
+      const cardData = {
+        name: document.getElementById('cardName').innerText,
+        role: document.getElementById('cardRole').innerText,
+        keywords: document.getElementById('cardKeywords').innerText,
+        goodAt: document.getElementById('cardGoodAt').innerText,
+        value: document.getElementById('cardValue').innerText,
+        change: document.getElementById('cardChange').innerText,
+        intro: document.getElementById('cardIntro').innerText,
+        slogan: document.getElementById('cardSlogan').innerText,
+        phone: document.getElementById('inputPhone').value.trim(),
+        email: document.getElementById('inputEmail').value.trim()
+      };
+
+      const jsonStr = JSON.stringify(cardData);
+      const encoded = utf8ToBase64(jsonStr);
+      const baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+      return `${baseUrl}?card=${encoded}`;
+    }
+
+    // Copy Shareable Direct Execution Link
+    function copyShareLink() {
+      const shareUrl = getShareableLink();
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('모바일 직접 실행 링크가 복사되었습니다!', 'success');
+        }).catch(() => fallbackCopyText(shareUrl));
+      } else {
+        fallbackCopyText(shareUrl);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('모바일 직접 실행 링크가 복사되었습니다!', 'success');
+      } catch (err) {
+        showToast('링크 복사에 실패했습니다.', 'error');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // Direct Execution on Page Load from URL Link
+    function loadCardFromUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedCard = urlParams.get('card');
+      if (!encodedCard) return;
+
+      try {
+        const decodedJson = base64ToUtf8(encodedCard);
+        const cardData = JSON.parse(decodedJson);
+
+        if (cardData.name) {
+          document.getElementById('inputName').value = cardData.name;
+          document.getElementById('cardName').innerText = cardData.name;
+        }
+        if (cardData.phone) document.getElementById('inputPhone').value = cardData.phone;
+        if (cardData.email) document.getElementById('inputEmail').value = cardData.email;
+        if (cardData.role) document.getElementById('cardRole').innerText = cardData.role;
+        if (cardData.keywords) document.getElementById('cardKeywords').innerText = cardData.keywords;
+        if (cardData.goodAt) document.getElementById('cardGoodAt').innerText = cardData.goodAt;
+        if (cardData.value) document.getElementById('cardValue').innerText = cardData.value;
+        if (cardData.change) document.getElementById('cardChange').innerText = cardData.change;
+        if (cardData.intro) document.getElementById('cardIntro').innerText = cardData.intro;
+        if (cardData.slogan) document.getElementById('cardSlogan').innerText = cardData.slogan;
+
+        updateContactInfo();
+
+        // Immediately switch tab to Card Preview on mobile
+        if (window.innerWidth < 1024) {
+          setTimeout(() => {
+            switchTab('card');
+          }, 100);
+        }
+        showToast('공유된 미래명함이 바로 실행되었습니다!', 'success');
+      } catch (e) {
+        console.error('Error loading card from URL:', e);
+      }
+    }
+
+    // Toast Notification Manager
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toastNotification');
+      if (!toast) return;
+
+      toast.innerText = message;
+      toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-sm px-4 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-2 pointer-events-auto backdrop-blur-md';
+
+      if (type === 'error') {
+        toast.classList.add('bg-rose-500/90', 'text-white', 'border-rose-400');
+      } else if (type === 'success') {
+        toast.classList.add('bg-emerald-600/90', 'text-white', 'border-emerald-400');
+      } else {
+        toast.classList.add('bg-slate-900/90', 'text-white', 'border-slate-700');
+      }
+
+      toast.classList.remove('-translate-y-12', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      if (window.toastTimer) clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    // Mobile View Tab Switcher
+    function switchTab(tabName) {
+      activeTab = tabName;
+      const secInput = document.getElementById('sectionInput');
+      const secAnalysis = document.getElementById('sectionAnalysis');
+      const secCard = document.getElementById('sectionCard');
+
+      const btnInput = document.getElementById('tabBtnInput');
+      const btnAnalysis = document.getElementById('tabBtnAnalysis');
+      const btnCard = document.getElementById('tabBtnCard');
+
+      // Reset classes
+      [btnInput, btnAnalysis, btnCard].forEach(btn => {
+        if (btn) btn.className = 'flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition hover:text-slate-800 text-slate-500';
+      });
+
+      secInput.classList.add('hidden');
+      secAnalysis.classList.add('hidden');
+      secCard.classList.add('hidden');
+
+      if (tabName === 'input') {
+        secInput.classList.remove('hidden');
+        btnInput.className = 'flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition text-indigo-600 bg-indigo-50 font-bold';
+      } else if (tabName === 'analysis') {
+        secAnalysis.classList.remove('hidden');
+        btnAnalysis.className = 'flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition text-indigo-600 bg-indigo-50 font-bold';
+      } else if (tabName === 'card') {
+        secCard.classList.remove('hidden');
+        btnCard.className = 'flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition text-indigo-600 bg-indigo-50 font-bold';
+      }
+      
+      // Ensure Desktop LG views show appropriately
+      if (window.innerWidth >= 1024) {
+        secInput.classList.remove('hidden');
+        secAnalysis.classList.remove('hidden');
+        secCard.classList.remove('hidden');
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        document.getElementById('sectionInput').classList.remove('hidden');
+        document.getElementById('sectionAnalysis').classList.remove('hidden');
+        document.getElementById('sectionCard').classList.remove('hidden');
+      } else {
+        switchTab(activeTab);
+      }
+    });
+
+    // Real-time Contact Info Synchronization
+    function updateContactInfo() {
+      const name = document.getElementById('inputName').value.trim();
+      const phone = document.getElementById('inputPhone').value.trim();
+      const email = document.getElementById('inputEmail').value.trim();
+
+      document.getElementById('cardName').innerText = name || '홍길동';
+
+      const phoneEl = document.getElementById('cardPhone');
+      if (phone) {
+        phoneEl.innerText = '📞 ' + phone;
+        phoneEl.classList.remove('hidden');
+      } else {
+        phoneEl.classList.add('hidden');
+      }
+
+      const emailEl = document.getElementById('cardEmail');
+      if (email) {
+        emailEl.innerText = '✉️ ' + email;
+        emailEl.classList.remove('hidden');
+      } else {
+        emailEl.classList.add('hidden');
+      }
+    }
+
+    // Card Background Color Theme
+    function setCardColor(color) {
+      const card = document.getElementById('cardContainer');
+      card.classList.remove('bg-card-yellow', 'bg-card-white', 'bg-card-pink', 'bg-card-blue', 'bg-card-nature', 'bg-card-dark', 'bg-card-cyber');
+      
+      if (color === 'yellow') card.classList.add('bg-card-yellow');
+      else if (color === 'white') card.classList.add('bg-card-white');
+      else if (color === 'pink') card.classList.add('bg-card-pink');
+      else if (color === 'blue') card.classList.add('bg-card-blue');
+      else if (color === 'nature') card.classList.add('bg-card-nature');
+      else if (color === 'dark') card.classList.add('bg-card-dark');
+      else if (color === 'cyber') card.classList.add('bg-card-cyber');
+    }
+
+    // Font Family Changer
+    function changeCardFont(fontStyle) {
+      const card = document.getElementById('cardContainer');
+      card.classList.remove('font-batang', 'font-pen', 'font-orbitron');
+      if (fontStyle === 'batang') card.classList.add('font-batang');
+      else if (fontStyle === 'pen') card.classList.add('font-pen');
+      else if (fontStyle === 'orbitron') card.classList.add('font-orbitron');
+    }
+
+    // Text Color Picker
+    function changeTextColor(color) {
+      const card = document.getElementById('cardContainer');
+      card.style.color = color;
+    }
+
+    // Sticker Selection
+    function selectSticker(stickerEl) {
+      document.querySelectorAll('#stickerLayer > div').forEach(el => {
+        el.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-1', 'rounded-lg');
+      });
+      
+      selectedSticker = stickerEl;
+      if (stickerEl) {
+        stickerEl.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-1', 'rounded-lg');
+      }
+    }
+
+    // Add Sticker to Canvas Layer
+    function addSticker(emoji) {
+      const layer = document.getElementById('stickerLayer');
+      const sticker = document.createElement('div');
+      
+      sticker.className = 'sticker-item text-2xl p-1 z-20';
+      sticker.innerText = emoji;
+      sticker.dataset.rotation = '0';
+      sticker.dataset.scale = '1';
+      
+      sticker.style.left = `${Math.floor(Math.random() * 40) + 30}%`;
+      sticker.style.top = `${Math.floor(Math.random() * 40) + 30}%`;
+      
+      sticker.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        selectSticker(sticker);
+      });
+
+      makeDraggable(sticker);
+      layer.appendChild(sticker);
+      selectSticker(sticker);
+      showToast('스티커 추가! 드래그나 위 버튼으로 조절하세요.', 'success');
+    }
+
+    function rotateSelectedSticker(deg) {
+      if (!selectedSticker) return;
+      let curr = parseFloat(selectedSticker.dataset.rotation || '0') + deg;
+      selectedSticker.dataset.rotation = curr;
+      applyStickerTransform(selectedSticker);
+    }
+
+    function scaleSelectedSticker(factor) {
+      if (!selectedSticker) return;
+      let curr = parseFloat(selectedSticker.dataset.scale || '1') + factor;
+      curr = Math.max(0.4, Math.min(curr, 3.0));
+      selectedSticker.dataset.scale = curr;
+      applyStickerTransform(selectedSticker);
+    }
+
+    function applyStickerTransform(el) {
+      const rot = el.dataset.rotation || '0';
+      const scale = el.dataset.scale || '1';
+      el.style.transform = `rotate(${rot}deg) scale(${scale})`;
+    }
+
+    function removeSelectedSticker() {
+      if (selectedSticker && selectedSticker.parentNode) {
+        selectedSticker.remove();
+        selectedSticker = null;
+        showToast('스티커가 삭제되었습니다.', 'info');
+      }
+    }
+
+    function clearAllStickers() {
+      const layer = document.getElementById('stickerLayer');
+      layer.innerHTML = '';
+      selectedSticker = null;
+      showToast('모든 스티커가 제거되었습니다.', 'info');
+    }
+
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('#stickerLayer > div') && !e.target.closest('button')) {
+        selectSticker(null);
+      }
+    });
+
+    // Touch and Drag Gesture Handler
+    function makeDraggable(element) {
+      let dragging = false;
+      let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+      element.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        element.setPointerCapture?.(e.pointerId);
+        const layer = document.getElementById('stickerLayer');
+        const layerRect = layer.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = rect.left - layerRect.left;
+        startTop = rect.top - layerRect.top;
+        selectSticker(element);
+      });
+
+      element.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const layer = document.getElementById('stickerLayer');
+        const layerRect = layer.getBoundingClientRect();
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const x = Math.max(0, Math.min(startLeft + dx, layerRect.width - element.offsetWidth));
+        const y = Math.max(0, Math.min(startTop + dy, layerRect.height - element.offsetHeight));
+        element.style.left = `${x}px`;
+        element.style.top = `${y}px`;
+      });
+
+      const stopDragging = () => { dragging = false; };
+      element.addEventListener('pointerup', stopDragging);
+      element.addEventListener('pointercancel', stopDragging);
+    }
+
+    // 핵심 가치 기반 슬로건 생성기
+    // 마지막 질문(q7)만 그대로 복사하지 않고, 1~7번 답변의 공통 가치를 찾아
+    // '내가 세상에 무엇을 전하고 싶은가'가 한 문장으로 느껴지도록 만듭니다.
+    function generateCoreValueSlogan(q1, q2, q3, q4, q5, q6, q7) {
+      const text = [q1,q2,q3,q4,q5,q6,q7].filter(Boolean).join(' ').trim();
+      if (!text) return '경험에 새로운 가능성을 더해, 더 나은 변화를 만듭니다.';
+      const has = (...words) => words.some(w => text.includes(w));
+
+      if (has('교육','수업','학생','아이','가르','배움','성장','코칭','강의'))
+        return '배움의 순간을 가능성으로 바꾸고, 사람의 성장을 더 넓은 미래로 연결합니다.';
+      if (has('AI','인공지능','디지털','코딩','기술','컴퓨터','웹','앱'))
+        return '새로운 기술에 사람의 상상력을 더해, 일상을 바꾸는 가능성을 만듭니다.';
+      if (has('사람','소통','공감','도움','봉사','돌봄','상담','친구'))
+        return '사람의 마음을 이해하고 연결하며, 함께 더 나은 내일을 만들어갑니다.';
+      if (has('환경','자연','지구','동물','지속가능'))
+        return '좋아하는 마음을 가치 있는 행동으로 바꾸어, 함께 살아갈 미래를 디자인합니다.';
+      if (has('그림','미술','디자인','예술','창작','콘텐츠','영상','음악','글쓰기'))
+        return '나만의 감각과 이야기로 마음을 움직이고, 세상에 새로운 영감을 더합니다.';
+      if (has('여행','문화','지역','관광'))
+        return '사람과 공간에 숨은 이야기를 발견해, 특별한 경험과 새로운 가치를 연결합니다.';
+      if (has('요리','음식','베이킹','맛'))
+        return '좋아하는 것을 새로운 경험으로 확장해, 평범한 일상에 특별한 즐거움을 더합니다.';
+      if (has('도전','성장','배우','새로운','변화','꿈'))
+        return '끊임없는 배움과 도전으로 가능성을 현실로 바꾸고, 변화의 다음 장을 엽니다.';
+      return '나만의 경험과 재능에 새로운 시선을 더해, 세상에 의미 있는 변화를 만들어갑니다.';
+    }
+
+    // Local Premium Brand Language Engine
+    // 답변의 의미를 그대로 복사하지 않고, 명함에 어울리는 '프리미엄 브랜드 언어'로 재구성합니다.
+    function generatePremiumProfile(name, q1, q2, q3, q4, q5, q6, q7) {
+      const answers = [q1,q2,q3,q4,q5,q6,q7].filter(Boolean);
+      const text = answers.join(' ');
+      const has = (...words) => words.some(w => text.toLowerCase().includes(w.toLowerCase()));
+
+      const themes = [
+        {key:'education', score:(has('교육','수업','학생','아이','강의','가르','배움','코칭','교사','학습')?3:0)+(has('성장','공부')?1:0)},
+        {key:'ai', score:(has('AI','인공지능','디지털','코딩','컴퓨터','웹','앱','기술','에듀테크')?3:0)},
+        {key:'creative', score:(has('그림','미술','디자인','예술','창작','콘텐츠','영상','음악','글쓰기','사진')?3:0)},
+        {key:'people', score:(has('사람','소통','공감','상담','도움','봉사','돌봄','관계','커뮤니티')?3:0)},
+        {key:'culture', score:(has('여행','문화','지역','관광','스토리','역사')?3:0)},
+        {key:'environment', score:(has('환경','자연','지구','동물','지속가능')?3:0)},
+        {key:'food', score:(has('요리','음식','베이킹','맛','카페')?3:0)},
+        {key:'growth', score:(has('도전','성장','새로운','변화','꿈','배우')?2:0)}
+      ].sort((a,b)=>b.score-a.score);
+      const primary = themes[0].score ? themes[0].key : 'general';
+      const secondary = themes[1].score ? themes[1].key : null;
+
+      const premium = {
+        education: {
+          strengths:['학습 경험을 구조화하는 인사이트','성장을 촉진하는 러닝 큐레이션','배움을 가치로 전환하는 설계력'],
+          abilities:['Learner Experience Design','Learning Content Curation','Human Growth Strategy'],
+          roles:['Future Learning Director','Learning Experience Curator','Growth Education Strategist'],
+          keywords:['#AI Literacy','#Future Learning','#Growth Design'],
+          goodAt:'배움의 경험을 설계하는 힘', valueProvided:'성장을 이끄는 학습 경험', changeCreated:'배움의 새로운 기준',
+          intro:'배움의 본질에 새로운 경험을 더해 성장의 가치를 설계합니다.',
+          slogan:'배움의 순간을 성장의 경험으로, 경험을 새로운 가능성으로.'
+        },
+        ai: {
+          strengths:['기술의 가능성을 발견하는 디지털 인사이트','복잡한 기술을 경험으로 전환하는 설계력','변화를 현실에 적용하는 테크 큐레이션'],
+          abilities:['AI Literacy Strategy','Digital Experience Design','Technology Curation'],
+          roles:['AI Experience Director','Digital Innovation Curator','Future Tech Strategist'],
+          keywords:['#AI Literacy','#Digital Wellness','#Future Innovation'],
+          goodAt:'기술과 경험을 연결하는 통찰', valueProvided:'사람 중심의 AI 경험', changeCreated:'일상을 바꾸는 기술 경험',
+          intro:'기술의 가능성을 사람의 경험으로 번역해 새로운 가치를 설계합니다.',
+          slogan:'기술의 가능성을 사람의 경험으로, 새로운 일상의 기준으로.'
+        },
+        creative: {
+          strengths:['아이디어를 브랜드 경험으로 확장하는 크리에이티브 인사이트','감각과 서사를 연결하는 콘텐츠 설계력','새로운 관점을 시각적 언어로 구현하는 표현력'],
+          abilities:['Creative Direction','Brand Storytelling','Visual Experience Design'],
+          roles:['Creative Brand Director','Visual Experience Curator','Storytelling Strategist'],
+          keywords:['#Creative Intelligence','#Brand Storytelling','#Experience Design'],
+          goodAt:'아이디어를 경험으로 만드는 감각', valueProvided:'기억에 남는 브랜드 경험', changeCreated:'새로운 시선과 감각의 확장',
+          intro:'아이디어와 감각을 하나의 경험으로 연결해 브랜드의 고유한 언어를 만듭니다.',
+          slogan:'감각을 이야기로, 이야기를 오래 남는 경험으로.'
+        },
+        people: {
+          strengths:['사람의 마음과 니즈를 읽는 휴먼 인사이트','관계를 신뢰로 전환하는 커뮤니케이션 설계력','다양한 관점을 조율하는 연결의 감각'],
+          abilities:['Human-Centered Communication','Relationship Experience Design','Community Curation'],
+          roles:['Human Experience Director','Relationship Experience Curator','Community Strategy Designer'],
+          keywords:['#Human Insight','#Empathic Leadership','#Community Design'],
+          goodAt:'사람과 가능성을 잇는 연결력', valueProvided:'신뢰를 만드는 경험 설계', changeCreated:'더 깊은 관계의 가치',
+          intro:'사람을 이해하는 시선으로 관계와 경험의 새로운 가치를 설계합니다.',
+          slogan:'사람을 이해하는 시선으로, 관계의 가치를 새롭게 설계합니다.'
+        },
+        culture: {
+          strengths:['공간과 사람의 맥락을 읽는 컬처 인사이트','경험을 서사로 큐레이션하는 감각','문화의 경계를 연결하는 확장적 시선'],
+          abilities:['Cultural Experience Curation','Place Storytelling','Lifestyle Experience Design'],
+          roles:['Culture Experience Director','Lifestyle Curator','Cultural Content Strategist'],
+          keywords:['#Cultural Insight','#Experience Curation','#Lifestyle Design'],
+          goodAt:'공간과 이야기를 큐레이션하는 감각', valueProvided:'특별한 문화 경험의 설계', changeCreated:'일상 속 문화적 영감',
+          intro:'사람과 공간, 이야기를 연결해 일상에 새로운 문화적 경험을 더합니다.',
+          slogan:'공간에 이야기를, 일상에 오래 남는 문화적 영감을.'
+        },
+        environment: {
+          strengths:['지속가능한 미래를 읽는 임팩트 인사이트','일상의 선택을 가치 있는 경험으로 전환하는 설계력','사람과 환경을 연결하는 지속가능성 감각'],
+          abilities:['Sustainability Strategy','Impact Experience Design','Green Lifestyle Curation'],
+          roles:['Sustainability Experience Director','Impact Curator','Green Lifestyle Strategist'],
+          keywords:['#Sustainable Living','#Impact Design','#Green Innovation'],
+          goodAt:'지속가능한 경험을 설계하는 시선', valueProvided:'지속가능한 일상의 기준', changeCreated:'더 나은 선택의 문화',
+          intro:'지속가능성을 일상의 경험으로 연결해 오래가는 가치를 설계합니다.',
+          slogan:'좋은 선택이 자연스러운 일상, 지속가능한 경험을 설계합니다.'
+        },
+        food: {
+          strengths:['취향의 가치를 발견하는 라이프스타일 인사이트','미식 경험을 매력적으로 큐레이션하는 감각','일상의 즐거움을 콘텐츠로 확장하는 기획력'],
+          abilities:['Culinary Experience Curation','Lifestyle Branding','Taste & Experience Design'],
+          roles:['Culinary Experience Director','Taste Curator','Lifestyle Experience Strategist'],
+          keywords:['#Taste Curation','#Lifestyle Design','#Experience Branding'],
+          goodAt:'취향을 경험으로 확장하는 감각', valueProvided:'일상을 풍요롭게 하는 경험', changeCreated:'취향의 새로운 가치',
+          intro:'취향과 감각을 하나의 경험으로 큐레이션해 일상에 새로운 가치를 더합니다.',
+          slogan:'취향을 감각으로, 감각을 오래 기억되는 경험으로.'
+        },
+        growth: {
+          strengths:['변화의 흐름을 읽는 Future Insight','경험에서 새로운 가능성을 발견하는 성장 설계력','아이디어를 현실로 전환하는 실행의 감각'],
+          abilities:['Future Insight Strategy','Personal Growth Design','Experience Innovation'],
+          roles:['Future Life Director','Experience Innovation Curator','Possibility Strategist'],
+          keywords:['#Future Insight','#Growth Design','#Life Innovation'],
+          goodAt:'경험에서 가능성을 발견하는 통찰', valueProvided:'성장의 방향을 설계하는 경험', changeCreated:'삶의 새로운 챕터',
+          intro:'경험에서 의미를 발견하고 다음 가능성으로 연결하는 미래의 장면을 설계합니다.',
+          slogan:'경험을 자산으로, 오늘의 선택을 내일의 방향으로.'
+        },
+        general: {
+          strengths:['경험의 맥락을 연결하는 Strategic Insight','새로운 관점을 발견하는 Creative Thinking','아이디어를 가치로 전환하는 Execution Design'],
+          abilities:['Strategic Insight','Experience Curation','Value Design'],
+          roles:['Future Experience Director','Value Experience Curator','Life Innovation Strategist'],
+          keywords:['#Strategic Insight','#Experience Design','#Future Vision'],
+          goodAt:'경험을 가치로 연결하는 통찰', valueProvided:'의미 있는 경험의 설계', changeCreated:'새로운 가치의 확장',
+          intro:'경험과 재능을 하나의 언어로 연결해 나만의 가치와 방향을 설계합니다.',
+          slogan:'경험에 새로운 시선을 더해, 나만의 가치가 선명해지는 순간.'
+        }
+      };
+
+      const data = JSON.parse(JSON.stringify(premium[primary]));
+      if (secondary === 'ai' && primary !== 'ai') data.keywords[0] = '#AI Literacy';
+      if (secondary === 'creative' && primary !== 'creative') data.keywords[1] = '#Creative Intelligence';
+      if (secondary === 'people' && primary !== 'people') data.keywords[1] = '#Human Insight';
+      if (secondary === 'culture' && primary !== 'culture') data.keywords[2] = '#Experience Curation';
+
+      const value = `${data.valueProvided}를 통해 ${data.changeCreated}을 설계합니다.`;
+      return {
+        strengths:data.strengths,
+        abilities:data.abilities,
+        roles:data.roles,
+        value,
+        cardInfo:{
+          selectedRole:data.roles[0], keywords:data.keywords,
+          goodAt:data.goodAt.slice(0,20), valueProvided:data.valueProvided.slice(0,20),
+          changeCreated:data.changeCreated.slice(0,20), intro:data.intro, slogan:data.slogan
+        }
+      };
+    }
+
+    function generateSmartFallbackCard(name, q1, q2, q3, q4, q5, q6, q7) {
+      return generatePremiumProfile(name, q1, q2, q3, q4, q5, q6, q7);
+    }
+
+    // Gemini API Fetch with Exponential Backoff & Local Fallback
+    async function fetchGeminiAnalysis(userPrompt, systemInstruction, name, q1, q2, q3, q4, q5, q6, q7) {
+      if (!apiKey) {
+        console.info("Gemini API Key가 없어 로컬 프리미엄 분석 엔진으로 생성합니다.");
+        return generateSmartFallbackCard(name, q1, q2, q3, q4, q5, q6, q7);
+      }
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              strengths: { type: "ARRAY", items: { type: "STRING" } },
+              abilities: { type: "ARRAY", items: { type: "STRING" } },
+              roles: { type: "ARRAY", items: { type: "STRING" } },
+              value: { type: "STRING" },
+              cardInfo: {
+                type: "OBJECT",
+                properties: {
+                  selectedRole: { type: "STRING" },
+                  keywords: { type: "ARRAY", items: { type: "STRING" } },
+                  goodAt: { type: "STRING" },
+                  valueProvided: { type: "STRING" },
+                  changeCreated: { type: "STRING" },
+                  intro: { type: "STRING" },
+                  slogan: { type: "STRING" }
+                },
+                required: ["selectedRole", "keywords", "goodAt", "valueProvided", "changeCreated", "intro", "slogan"]
+              }
+            },
+            required: ["strengths", "abilities", "roles", "value", "cardInfo"]
+          }
+        }
+      };
+
+      let retries = 0;
+      const delays = [1000, 2000, 4000];
+
+      while (retries <= 3) {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!jsonText) throw new Error("Empty response from AI model");
+          return JSON.parse(jsonText);
+        } catch (error) {
+          if (retries === 3) {
+            console.warn("Gemini API 호출에 실패하여 로컬 분석 엔진으로 전환합니다.", error);
+            return generateSmartFallbackCard(name, q1, q2, q3, q4, q5, q6, q7);
+          }
+          await new Promise(resolve => setTimeout(resolve, delays[retries]));
+          retries++;
+        }
+      }
+    }
+
+    // Core Generation Handler
+    async function generateFutureCard() {
+      const name = document.getElementById('inputName').value.trim();
+      if (!name) {
+        showToast('이름 또는 닉네임을 꼭 입력해주세요!', 'error');
+        document.getElementById('inputName').focus();
+        return;
+      }
+
+      const q1 = document.getElementById('q1').value;
+      const q2 = document.getElementById('q2').value;
+      const q3 = document.getElementById('q3').value;
+      const q4 = document.getElementById('q4').value;
+      const q5 = document.getElementById('q5').value;
+      const q6 = document.getElementById('q6').value;
+      const q7 = document.getElementById('q7').value;
+
+      const userPrompt = `
+이름: ${name}
+1. 지금 내가 하고 있는 일/역할: ${q1}
+2. 지금까지 해온 일: ${q2}
+3. 내가 잘하는 것: ${q3}
+4. 내가 좋아하는 것: ${q4}
+5. 내가 가진 재능이나 경험: ${q5}
+6. 앞으로 해보고 싶은 것: ${q6}
+7. 내가 만들고 싶은 삶: ${q7}
+      `;
+
+      const systemInstruction = `
+너는 개인의 미래 역량과 경험을 바탕으로 고급 라이프스타일 브랜드와 글로벌 에듀테크 기업의 네이밍/브랜드 전략가처럼 '미래 역할'과 '미래 명함'을 디자인하는 AI야.
+작성된 답변들을 창의적으로 재조합하여 미래지향적이면서 감동적인 커리어 역할을 제안해줘.
+
+JSON schema 응답 규칙:
+- strengths: 실제 답변에 근거하되, 평범한 '창의력/성실함/공감능력' 같은 단어를 피하고 Strategic Insight, Experience Design, Creative Intelligence처럼 전문 브랜드의 역량명으로 세련되게 표현한 3개. 예: 문제 해결 능력 → 복잡한 문제를 구조화하는 해결력 / 다양한 경험 → 경험을 연결하는 통찰력.
+- abilities: 지금까지의 경험을 바탕으로 전문 영역을 정의하는 '역량 브랜드' 3개. 필요하면 짧은 영어 전문용어를 자연스럽게 사용하되 과장하지 말 것. 예: 경험 중심 사고 → 경험 기반 인사이트 설계 / 주도적 역할 수행 → 프로젝트를 이끄는 실행력 / 융합적 커뮤니케이션 → 사람과 아이디어를 잇는 연결력.
+- roles: 답변에서 가장 강하게 드러난 1~2개 분야를 중심으로 Director, Curator, Strategist, Designer 등 전문 직함을 활용한 세련된 미래 직업명 3개를 만들 것. 단, 실제 답변과 관련 없는 분야는 추가하지 말 것. 예: 글로벌 스토리 컨설턴트, 미래 라이프 큐레이터, 가치 경험 디렉터. 단, 답변에 없는 분야를 억지로 추가하지 말 것.
+- value: 1~7번 답변의 공통된 방향을 찾아, '무엇을 누구에게 어떤 경험/가치로 전환하는가'가 느껴지는 프리미엄 브랜드 문장으로 표현할 것. 단순 복사 금지.
+- cardInfo: 명함 요약정보 (selectedRole, keywords 3개, goodAt 15자이내, valueProvided 20자이내, changeCreated 20자이내, intro 1문장, slogan 1문장)
+- goodAt/valueProvided/changeCreated/intro: 원문을 그대로 옮기지 말고 핵심 의미를 프리미엄 브랜드 카피로 재해석할 것. 짧고 선명하며 명함에서 읽었을 때 세련되어야 함. '잘하는 것'은 역량 언어로, '제공가치'는 고객/사람에게 주는 결과 언어로, '만들 변화'는 미래의 장면이 그려지는 언어로 표현할 것.
+- slogan: 명함 마지막에 들어갈 프리미엄 브랜드 슬로건. 경험·강점·취향·미래 계획을 관통하는 핵심 가치를 찾아 25~35자 정도의 세련된 한 문장으로 재창작할 것. 원문을 반복하지 말고, '가능성/변화/더 나은 미래' 같은 흔한 자기계발 표현만 나열하지 말 것. 브랜드 슬로건처럼 리듬과 여운이 있어야 하며 따옴표는 넣지 말 것.
+      `;
+
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+      document.getElementById('loadingOverlay').classList.add('flex');
+
+      try {
+        const data = await fetchGeminiAnalysis(userPrompt, systemInstruction, name, q1, q2, q3, q4, q5, q6, q7);
+        
+        // Update AI Analysis Results UI
+        document.getElementById('emptyAnalysisText').classList.add('hidden');
+        document.getElementById('analysisContent').classList.remove('hidden');
+        
+        const badge = document.getElementById('analysisBadge');
+        badge.innerText = '분석 완료';
+        badge.className = 'text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full';
+
+        document.getElementById('resStrengths').innerHTML = data.strengths
+          .map(s => `<span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg text-xs font-bold">#${s}</span>`).join(' ');
+        
+        document.getElementById('resAbilities').innerHTML = data.abilities
+          .map(a => `<span class="bg-purple-50 text-purple-700 px-2.5 py-1 rounded-lg text-xs font-bold">#${a}</span>`).join(' ');
+
+        document.getElementById('resRoles').innerHTML = data.roles
+          .map(r => `
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="font-bold text-slate-800 text-xs sm:text-sm">✨ ${r}</span>
+              <button onclick="applyRole('${r}')" class="text-[11px] bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-700 active:scale-95 transition cursor-pointer shrink-0">명함에 적용</button>
+            </div>
+          `).join('');
+
+        document.getElementById('resValue').innerText = data.value;
+
+        // Render Card Graphic Data
+        document.getElementById('cardRole').innerText = data.cardInfo.selectedRole;
+        document.getElementById('cardKeywords').innerText = data.cardInfo.keywords.map(k => `#${k.replace(/^#/, '')}`).join(' ');
+        document.getElementById('cardGoodAt').innerText = data.cardInfo.goodAt;
+        document.getElementById('cardValue').innerText = data.cardInfo.valueProvided;
+        document.getElementById('cardChange').innerText = data.cardInfo.changeCreated;
+        document.getElementById('cardIntro').innerText = data.cardInfo.intro;
+        document.getElementById('cardSlogan').innerText = data.cardInfo.slogan;
+        
+        updateContactInfo();
+        
+        showToast('성공적으로 미래 명함이 생성되었습니다!', 'success');
+
+        // On mobile, auto switch to Card Preview tab
+        if (window.innerWidth < 1024) {
+          switchTab('card');
+        }
+
+      } catch (err) {
+        console.error(err);
+        showToast('AI 분석을 완료하지 못했습니다. 입력 내용을 확인한 뒤 다시 시도해주세요.', 'error');
+      } finally {
+        document.getElementById('loadingOverlay').classList.add('hidden');
+        document.getElementById('loadingOverlay').classList.remove('flex');
+      }
+    }
+
+    function applyRole(roleName) {
+      document.getElementById('cardRole').innerText = roleName;
+      showToast(`'${roleName}' 직함이 적용되었습니다.`, 'info');
+      if (window.innerWidth < 1024) switchTab('card');
+    }
+
+    function closeMobileModal() {
+      document.getElementById('mobileImageModal').classList.add('hidden');
+      document.getElementById('mobileImageModal').classList.remove('flex');
+    }
+
+    async function shareGeneratedCard() {
+      if (!currentCardDataUrl) return;
+
+      try {
+        const response = await fetch(currentCardDataUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'future_business_card.png', { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: '나의 AI 미래명함',
+            text: 'AI가 만든 나의 새로운 미래 명함입니다!',
+            files: [file]
+          });
+        } else if (navigator.share) {
+          await navigator.share({
+            title: '나의 AI 미래명함',
+            text: 'AI가 만든 나의 새로운 미래 명함입니다!'
+          });
+        } else {
+          showToast('이미지를 길게 눌러 사진첩에 저장하세요!', 'info');
+        }
+      } catch (err) {
+        console.log('Share error or canceled:', err);
+      }
+    }
+
+    // 실제 파일 다운로드: 브라우저가 합성 MouseEvent를 막는 경우를 피하고,
+    // 사용자의 클릭 이벤트 안에서 HTMLAnchorElement.click()을 직접 호출합니다.
+    function forceDownloadBlob(blob, fileName) {
+      if (!blob || blob.size < 1000) throw new Error('빈 이미지 파일입니다.');
+      const safeFileName = (fileName || '미래명함.png').replace(/[\\/:*?"<>|]/g, '_');
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = safeFileName;
+      link.rel = 'noopener';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
+      return true;
+    }
+
+    // Render Canvas & Export Image
+    async function downloadCard() {
+      const cardContainer = document.getElementById('cardContainer');
+      if (!cardContainer) { showToast('명함을 찾을 수 없습니다.', 'error'); return; }
+      selectSticker(null);
+      try {
+        if (document.fonts && document.fonts.ready) await document.fonts.ready;
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        const canvas = await html2canvas(cardContainer, {
+          scale: Math.max(2, Math.min(3, window.devicePixelRatio || 2)),
+          useCORS: true, allowTaint: true, backgroundColor: null,
+          logging: false, imageTimeout: 15000,
+          scrollX: 0, scrollY: -window.scrollY
+        });
+        const safeName = ((document.getElementById('cardName')?.innerText || '미래명함')
+          .replace(/[\\/:*?"<>|]/g, '_').trim()) || '미래명함';
+        const fileName = `${safeName}_미래명함.png`;
+        currentCardDataUrl = canvas.toDataURL('image/png');
+
+        const blob = await new Promise((resolve, reject) => {
+          canvas.toBlob(b => b ? resolve(b) : reject(new Error('PNG 생성 실패')), 'image/png', 1.0);
+        });
+        if (!blob || blob.size < 1000) throw new Error('이미지 데이터가 비어 있습니다.');
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+          const modalImg = document.getElementById('mobileModalImg');
+          modalImg.src = currentCardDataUrl;
+          modalImg.dataset.filename = fileName;
+          const modal = document.getElementById('mobileImageModal');
+          modal.classList.remove('hidden'); modal.classList.add('flex');
+          showToast('명함 이미지가 준비되었습니다. 아래 저장 버튼을 눌러주세요.', 'success');
+          return;
+        }
+
+        // PC: data URL + Blob URL 두 방식으로 시도하여 실제 다운로드 성공률을 높입니다.
+        await forceDownloadBlob(blob, fileName);
+        showToast('명함 이미지 파일 다운로드를 시작했습니다. 다운로드 폴더를 확인해주세요.', 'success');
+      } catch (err) {
+        console.error('downloadCard error:', err);
+        showToast('이미지 저장에 실패했습니다. 다시 시도해주세요.', 'error');
+      }
+    }
+
+    async function saveMobileImage() {
+      if (!currentCardDataUrl) { showToast('저장할 이미지가 없습니다. 명함을 먼저 만들어주세요.', 'error'); return; }
+      const img = document.getElementById('mobileModalImg');
+      const fileName = img.dataset.filename || '미래명함.png';
+      const btn = document.getElementById('btnMobileDownload');
+
+      // iOS Safari(웹킷)는 blob URL에 대한 <a download> 강제 다운로드를 지원하지 않습니다.
+      // 클릭을 해도 아무 반응이 없어 "저장이 안 된다"는 문제가 발생하므로,
+      // iOS에서는 새 탭에 이미지를 직접 열어 '길게 눌러 사진에 저장'하도록 안내합니다.
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      try {
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+
+        if (isIOS) {
+          const win = window.open(currentCardDataUrl, '_blank');
+          if (win) {
+            showToast('새 창에서 이미지를 길게 눌러 "사진에 추가"로 저장해주세요.', 'success');
+          } else {
+            showToast('팝업이 차단되었습니다. 아래 이미지를 길게 눌러 저장해주세요.', 'info');
+          }
+          return;
+        }
+
+        const response = await fetch(currentCardDataUrl);
+        if (!response.ok) throw new Error('이미지 데이터를 불러오지 못했습니다.');
+        const blob = await response.blob();
+        forceDownloadBlob(blob, fileName);
+        showToast('이미지 다운로드를 시작했습니다.', 'success');
+      } catch (err) {
+        console.error('Mobile save error:', err);
+        // 다운로드 자체가 차단된 안드로이드/기타 브라우저를 위한 폴백:
+        // 새 탭에서 이미지를 열어 길게 눌러 저장할 수 있게 합니다.
+        try {
+          const win = window.open(currentCardDataUrl, '_blank');
+          if (win) showToast('이미지를 새 창에서 열었습니다. 길게 눌러 저장해주세요.', 'info');
+          else throw err;
+        } catch (fallbackErr) {
+          showToast('자동 다운로드가 차단되었습니다. 명함 이미지를 길게 눌러 저장해주세요.', 'info');
+        }
+      } finally {
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+      }
+    }
+
+    // Local Storage Card Gallery
+    function saveCardToGallery() {
+      const cardContainer = document.getElementById('cardContainer');
+      selectSticker(null);
+
+      html2canvas(cardContainer, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+        const dataUrl = canvas.toDataURL('image/png');
+        const role = document.getElementById('cardRole').innerText;
+        const name = document.getElementById('cardName').innerText;
+
+        const newItem = {
+          id: Date.now(),
+          role: role,
+          name: name,
+          img: dataUrl,
+          date: new Date().toLocaleDateString('ko-KR')
+        };
+
+        savedCards.unshift(newItem);
+        if (savedCards.length > 20) savedCards.pop();
+
+        try {
+          localStorage.setItem('my_future_cards', JSON.stringify(savedCards));
+          updateGalleryBadge();
+          showToast('보관함에 저장되었습니다!', 'success');
+        } catch (e) {
+          showToast('용량 초과로 저장하지 못했습니다.', 'error');
+        }
+      });
+    }
+
+    function loadGalleryFromStorage() {
+      try {
+        const stored = localStorage.getItem('my_future_cards');
+        if (stored) {
+          savedCards = JSON.parse(stored);
+          updateGalleryBadge();
+        }
+      } catch (e) {}
+    }
+
+    function updateGalleryBadge() {
+      const badge = document.getElementById('galleryBadge');
+      if (savedCards.length > 0) {
+        badge.innerText = savedCards.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function openGalleryModal() {
+      const list = document.getElementById('galleryList');
+      if (savedCards.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 text-slate-400 text-xs">
+            <i data-lucide="bookmark" class="w-10 h-10 mx-auto mb-2 opacity-30"></i>
+            아직 보관함에 저장된 명함이 없습니다.<br>명함을 만들고 '보관함에 보관'을 눌러보세요!
+          </div>
+        `;
+      } else {
+        list.innerHTML = savedCards.map(item => `
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800">${item.role} (${item.name})</span>
+              <span class="text-[10px] text-slate-400">${item.date}</span>
+            </div>
+            <img src="${item.img}" alt="명함" class="w-full h-auto rounded-xl shadow-xs">
+            <div class="flex justify-end gap-2 pt-1">
+              <button onclick="deleteGalleryItem(${item.id})" class="px-2.5 py-1 text-[11px] text-rose-600 hover:bg-rose-50 rounded-lg">삭제</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (window.lucide) lucide.createIcons();
+      document.getElementById('galleryModal').classList.remove('hidden');
+      document.getElementById('galleryModal').classList.add('flex');
+    }
+
+    function closeGalleryModal() {
+      document.getElementById('galleryModal').classList.add('hidden');
+      document.getElementById('galleryModal').classList.remove('flex');
+    }
+
+    function deleteGalleryItem(id) {
+      savedCards = savedCards.filter(c => c.id !== id);
+      localStorage.setItem('my_future_cards', JSON.stringify(savedCards));
+      updateGalleryBadge();
+      openGalleryModal();
+      showToast('삭제되었습니다.', 'info');
+    }
+  </script>
+</body>
+</html>
